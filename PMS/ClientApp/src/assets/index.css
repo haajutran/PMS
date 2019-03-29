@@ -1,0 +1,42 @@
+.left-menu.ant-layout-sider {
+  background: #fff;
+  min-width: unset !important;
+  max-width: unset !important;
+  width: 250px !important;
+}
+.left-menu.ant-layout-sider.ant-layout-sider-collapsed {
+  width: 79px !important;
+}
+.left-menu .ant-menu-inline {
+  border-right: none;
+}
+
+/* Logo */
+.left-menu .logo {
+  height: 64px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.left-menu .logo img {
+  height: 50px;
+}
+
+.left-menu .ant-menu-item-group-title {
+  padding: 0;
+  border-top: 1px solid rgb(185, 185, 185);
+  margin: 0 1em;
+}
+.left-menu .ant-menu-item-group:first-child .ant-menu-item-group-title {
+  border-top: none;
+}
+
+/* Custom Form */
+.custom-form h2 {
+  text-align: center;
+  margin-bottom: 1em;
+}
+
+.custom-form .ant-calendar-picker {
+  width: 100%;
+}
