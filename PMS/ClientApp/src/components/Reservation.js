@@ -3,6 +3,8 @@ import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { actionCreators } from "../store/Reservation";
 import { Link } from "react-router-dom";
+import GuestInfoForm from "./Reservation/GuestInfoForm";
+import GuestMoreInfoForm from "./Reservation/GuestMoreInfoForm";
 import {
   Row,
   Col,
@@ -17,7 +19,8 @@ import {
   DatePicker,
   Table,
   InputNumber,
-  Tabs
+  Tabs,
+  Modal
 } from "antd";
 
 const { Option } = Select;
@@ -62,7 +65,8 @@ class Reservation extends Component {
     super(props);
     this.state = {
       checkNick: false,
-      currentTab: "guests"
+      currentTab: "guests",
+      guestsModal: false
     };
   }
 
@@ -79,8 +83,16 @@ class Reservation extends Component {
     });
   };
 
-  callback = e => {
-    console.log("click ", e);
+  showGuestsModal = () => {
+    this.setState({
+      guestsModal: true
+    });
+  };
+
+  closeGuestsModal = () => {
+    this.setState({
+      guestsModal: false
+    });
   };
 
   render() {
@@ -707,28 +719,48 @@ class Reservation extends Component {
               </div>
             </Col>
           </Row>
-
-          <div>
-            <Tabs
-              defaultActiveKey="1"
-              onChange={() => this.callback()}
-              type="card"
-            >
-              <TabPane tab="Guests" key="guests">
-                <div className="tab-toolbar">
-                  <Button type="primary">Thêm</Button>
-                </div>
-                <Table dataSource={dataSource} columns={columns} />
-              </TabPane>
-              <TabPane tab="Special" key="special">
-                Content of Tab Pane 2
-              </TabPane>
-              <TabPane tab="More Info" key="moreInfo">
-                Content of Tab Pane 3
-              </TabPane>
-            </Tabs>
-          </div>
         </Form>
+
+        <div>
+          <Tabs
+            defaultActiveKey="guests"
+            // onChange={() => this.callback()}
+            type="card"
+          >
+            <TabPane tab="Guests" key="guests">
+              <div className="tab-toolbar">
+                <Button type="primary" onClick={() => this.showGuestsModal()}>
+                  Thêm
+                </Button>
+                <Modal
+                  visible={this.state.guestsModal}
+                  onOk={this.handleOk}
+                  onCancel={() => this.closeGuestsModal()}
+                >
+                  <Tabs
+                    defaultActiveKey="guestInfo"
+                    // onChange={() => this.callback()}
+                    type="card"
+                  >
+                    <TabPane tab="Guest Info" key="guestInfo">
+                      <GuestInfoForm />
+                    </TabPane>
+                    <TabPane tab="More Info" key="moreInfo2">
+                      <GuestMoreInfoForm />
+                    </TabPane>
+                  </Tabs>
+                </Modal>
+              </div>
+              <Table dataSource={dataSource} columns={columns} />
+            </TabPane>
+            <TabPane tab="Special" key="special">
+              Content of Tab Pane 2
+            </TabPane>
+            <TabPane tab="More Info" key="moreInfo">
+              Content of Tab Pane 3
+            </TabPane>
+          </Tabs>
+        </div>
       </div>
     );
   }

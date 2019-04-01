@@ -52,3 +52,9 @@
   height: 50px;
   padding: 9px 20px;
 }
+
+/* Modal */
+.ant-modal {
+  width: 50% !important;
+  min-width: 400px;
+}
