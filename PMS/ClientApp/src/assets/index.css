@@ -44,3 +44,11 @@
 .custom-form .guest-type {
   text-align: center;
 }
+
+/* Table */
+.tab-toolbar {
+  width: 100%;
+  background: rgba(231, 231, 231, 0.836);
+  height: 50px;
+  padding: 9px 20px;
+}

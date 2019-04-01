@@ -15,17 +15,54 @@ import {
   Select,
   Switch,
   DatePicker,
-  InputNumber
+  Table,
+  InputNumber,
+  Tabs
 } from "antd";
 
 const { Option } = Select;
 const { TextArea } = Input;
+const TabPane = Tabs.TabPane;
+
+const dataSource = [
+  {
+    key: "1",
+    name: "Mike",
+    age: 32,
+    address: "10 Downing Street"
+  },
+  {
+    key: "2",
+    name: "John",
+    age: 42,
+    address: "10 Downing Street"
+  }
+];
+
+const columns = [
+  {
+    title: "Name",
+    dataIndex: "name",
+    key: "name"
+  },
+  {
+    title: "Age",
+    dataIndex: "age",
+    key: "age"
+  },
+  {
+    title: "Address",
+    dataIndex: "address",
+    key: "address"
+  }
+];
 
 class Reservation extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      checkNick: false
+      checkNick: false,
+      currentTab: "guests"
     };
   }
 
@@ -40,6 +77,10 @@ class Reservation extends Component {
         console.log("Received values of form: ", values);
       }
     });
+  };
+
+  callback = e => {
+    console.log("click ", e);
   };
 
   render() {
@@ -263,17 +304,7 @@ class Reservation extends Component {
                     </Select>
                   )}
                 </Form.Item>
-                <Form.Item
-                  {...formItemLayout}
-                  label="Guest Type"
-                  className="guest-type"
-                >
-                  <Row>
-                    <Col span={8}>Adult</Col>
-                    <Col span={8}>Child</Col>
-                    <Col span={8}>Baby</Col>
-                  </Row>
-                </Form.Item>
+
                 <Form.Item
                   {...formItemLayout}
                   label="Num Guest"
@@ -291,6 +322,7 @@ class Reservation extends Component {
                           rules: []
                         })(
                           <InputNumber
+                            placeholder="Adult"
                             min={0}
                             style={{
                               width: "100%"
@@ -310,6 +342,7 @@ class Reservation extends Component {
                           rules: []
                         })(
                           <InputNumber
+                            placeholder="Child"
                             min={0}
                             style={{
                               width: "100%"
@@ -325,10 +358,11 @@ class Reservation extends Component {
                           width: "100%"
                         }}
                       >
-                        {getFieldDecorator("guestTypeBoby", {
+                        {getFieldDecorator("guestTypeBaby", {
                           rules: []
                         })(
                           <InputNumber
+                            placeholder="Baby"
                             min={0}
                             style={{
                               width: "100%"
@@ -673,6 +707,27 @@ class Reservation extends Component {
               </div>
             </Col>
           </Row>
+
+          <div>
+            <Tabs
+              defaultActiveKey="1"
+              onChange={() => this.callback()}
+              type="card"
+            >
+              <TabPane tab="Guests" key="guests">
+                <div className="tab-toolbar">
+                  <Button type="primary">Thêm</Button>
+                </div>
+                <Table dataSource={dataSource} columns={columns} />
+              </TabPane>
+              <TabPane tab="Special" key="special">
+                Content of Tab Pane 2
+              </TabPane>
+              <TabPane tab="More Info" key="moreInfo">
+                Content of Tab Pane 3
+              </TabPane>
+            </Tabs>
+          </div>
         </Form>
       </div>
     );
