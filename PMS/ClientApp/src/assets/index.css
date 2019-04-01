@@ -40,3 +40,7 @@
 .custom-form .ant-calendar-picker {
   width: 100%;
 }
+
+.custom-form .guest-type {
+  text-align: center;
+}
