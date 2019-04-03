@@ -3,6 +3,7 @@ import { Route } from "react-router";
 import Layout from "./components/Layout";
 import Home from "./components/Home";
 import Reservation from "./components/Reservation";
+import GuestSearch from "./components/GuestSearch";
 import Counter from "./components/Counter";
 import FetchData from "./components/FetchData";
 
@@ -12,6 +13,7 @@ export default () => (
     <Route path="/counter" component={Counter} />
 
     <Route path="/reservation" component={Reservation} />
+    <Route path="/guestsearch" component={GuestSearch} />
 
     <Route path="/fetch-data/:startDateIndex?" component={FetchData} />
   </Layout>

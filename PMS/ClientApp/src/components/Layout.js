@@ -46,7 +46,7 @@ class MainLayout extends React.Component {
           <Layout style={{ marginLeft: collapsed ? 79 : 250 }}>
             <Header
               style={{
-                background: "#635ebe",
+                background: "#99ced3",
                 padding: "0 1em"
               }}
             >
