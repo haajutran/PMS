@@ -4,6 +4,10 @@ import Layout from "./components/Layout";
 import Home from "./components/Home";
 import Reservation from "./components/Reservation";
 import GuestSearch from "./components/GuestSearch";
+
+import GuestProfile from "./components/GuestProfile/GuestProfile";
+import ProfileSearch from "./components/ProfileSearch";
+
 import Counter from "./components/Counter";
 import FetchData from "./components/FetchData";
 
@@ -14,6 +18,8 @@ export default () => (
 
     <Route path="/reservation" component={Reservation} />
     <Route path="/guestsearch" component={GuestSearch} />
+    <Route path="/guestprofile" component={GuestProfile} />
+    <Route path="/profileSearch" component={ProfileSearch} />
 
     <Route path="/fetch-data/:startDateIndex?" component={FetchData} />
   </Layout>

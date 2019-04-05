@@ -123,3 +123,22 @@
 .custom-table {
   margin: 1em;
 }
+
+.actions1 {
+  padding-left: 1em;
+  text-align: center;
+}
+.actions1 .btns {
+  background: rgb(238, 238, 238);
+  box-shadow: -1px 0px 15px -6px rgba(64, 64, 64, 1);
+}
+.actions1 button:first-child {
+  margin-right: 1em;
+}
+.actions1 button:last-child {
+  margin-bottom: 1em;
+}
+
+.actions1 button {
+  margin-top: 1em;
+}
