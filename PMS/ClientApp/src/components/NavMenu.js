@@ -76,8 +76,10 @@ export default class NavMenu extends React.Component {
             <span className="nav-text">Room Status</span>
           </Menu.Item>
           <Menu.Item key="roomplan">
-            <Icon type="cloud-o" />
-            <span className="nav-text">Room Plan</span>
+            <Link to="/roomplan">
+              <Icon type="cloud-o" />
+              <span className="nav-text">Room Plan</span>
+            </Link>
           </Menu.Item>
           <Menu.Item key="floorplan">
             <Icon type="appstore-o" />
