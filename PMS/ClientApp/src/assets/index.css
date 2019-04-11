@@ -3,6 +3,7 @@
   min-width: unset !important;
   max-width: unset !important;
   width: 250px !important;
+  overflow: auto;
 }
 .left-menu.ant-layout-sider.ant-layout-sider-collapsed {
   width: 79px !important;
@@ -72,7 +73,7 @@
   color: #99ced3;
 }
 .top-menu i {
-  font-size: 40px;
+  font-size: 20px;
 }
 .top-menu .title {
   font-size: 12px;
@@ -80,7 +81,7 @@
 
 /* Content */
 .content {
-  margin: 2em 0;
+  /* margin: 2em 0; */
 }
 
 .custom-form .title {
@@ -141,4 +142,9 @@
 
 .actions1 button {
   margin-top: 1em;
+}
+
+/* Floor Plan */
+.floorplan {
+  margin-top: 2em;
 }

@@ -82,8 +82,10 @@ export default class NavMenu extends React.Component {
             </Link>
           </Menu.Item>
           <Menu.Item key="floorplan">
-            <Icon type="appstore-o" />
-            <span className="nav-text">Floor Plan</span>
+            <Link to="/floorplan">
+              <Icon type="appstore-o" />
+              <span className="nav-text">Floor Plan</span>
+            </Link>
           </Menu.Item>
           <Menu.Item key="cashier">
             <Icon type="team" />

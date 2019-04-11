@@ -27,6 +27,18 @@ namespace PMS
             {
                 configuration.RootPath = "ClientApp/build";
             });
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy", builder =>
+                {
+                    builder.AllowAnyHeader()
+                        // .AllowAnyOrigin()
+                        .WithOrigins("http://180.148.1.165")
+                        .AllowCredentials()
+                        .AllowAnyMethod();
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -46,6 +58,7 @@ namespace PMS
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
+            app.UseCors("CorsPolicy");
 
             app.UseMvc(routes =>
             {
