@@ -8,7 +8,7 @@ const { Header, Content, Footer, Sider } = Layout;
 
 class MainLayout extends React.Component {
   state = {
-    collapsed: false
+    collapsed: true
   };
 
   toggle = () => {

@@ -50,7 +50,7 @@ export const login = async data => {
 
 export const get = async url => {
   return await axios
-    .get("http://180.148.1.165/api/api/roommap/getlistroom")
+    .get(constant.BASE_URL + url)
     .then(res => {
       return res;
     })

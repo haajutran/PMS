@@ -105,6 +105,9 @@
   margin: 1px 0;
   height: 40px;
 }
+.no-valid-form .ant-form-item-label {
+  height: 36px;
+}
 .no-valid-form .ant-form-item-label label {
   display: block;
   padding-left: 10px;
@@ -112,11 +115,12 @@
   width: 100%;
   background: #99ced3;
   color: #fff;
-  height: 40px;
+  line-height: 32px;
+  margin-top: 4px;
 }
 
 .no-valid-form .ant-form-item-control input {
-  height: 40px;
+  height: 32px;
   border-radius: 0;
   border-color: #ddd;
 }
