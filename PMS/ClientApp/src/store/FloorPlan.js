@@ -6,7 +6,7 @@ const receiveFloorPlansType = "RECEIVE_FLOOR_PLANS";
 const requestSearchFormType = "REQUEST_SEARCH_FORM";
 const receiveSearchFormType = "RECEIVE_SEARCH_FORM";
 
-const initialState = { floorPlans: [], isLoading: false, searchForm: [] };
+const initialState = { isLoading: false };
 
 export const actionCreators = {
   requestFloorPlans: () => async dispatch => {
@@ -14,7 +14,6 @@ export const actionCreators = {
     const url = "api/api/roommap/getlistroom";
     const res = await dataService.get(url);
     // const res = await fetch("http://180.148.1.174/api/reports/getall");
-    console.log(res);
     dispatch({ type: receiveFloorPlansType, floorPlans: res.data });
   },
   requestSearchForm: () => async dispatch => {
@@ -37,6 +36,23 @@ export const actionCreators = {
         listBuilding: listBuilding.data
       }
     });
+  },
+  search: fields => async dispatch => {
+    dispatch({ type: requestFloorPlansType });
+    var keys = Object.keys(fields);
+    var params = "";
+    keys.forEach(key => {
+      var value = fields[key];
+      if (value) {
+        params += "?" + key + "=" + value;
+      }
+    });
+    // console.log(params);
+    const url = "api/api/roommap/getlistroom";
+    const res = await dataService.get(url + params);
+    // const res = await fetch("http://180.148.1.174/api/reports/getall");
+    dispatch({ type: receiveFloorPlansType, floorPlans: res.data });
+    // console.log(aaa);
   }
 };
 

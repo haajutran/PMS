@@ -119,6 +119,10 @@
   margin-top: 4px;
 }
 
+.no-valid-form .ant-select-selection {
+  border-radius: 0;
+}
+
 .no-valid-form .ant-form-item-control input {
   height: 32px;
   border-radius: 0;

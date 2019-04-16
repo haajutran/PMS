@@ -63,9 +63,22 @@ class RoomPlan extends React.Component {
     this.props.requestFloorPlans();
   }
 
+  handleSearch = () => {
+    this.props.form.validateFields((err, values) => {
+      if (!err) {
+        console.log("Received values of form: ", values);
+        this.props.search(values);
+      }
+    });
+  };
+
+  handleReset = () => {
+    this.props.form.resetFields();
+  };
+
   render() {
     const { getFieldDecorator } = this.props.form;
-    console.log(this.props);
+    // console.log(this.props);
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -77,11 +90,11 @@ class RoomPlan extends React.Component {
       }
     };
     const { floorPlans, searchForm, isLoading } = this.props;
-    console.log(searchForm);
+    // console.log(searchForm);
     // console.log(floorPlans);
     return (
       <div className="content">
-        {!isLoading ? (
+        {floorPlans && searchForm ? (
           <Row gutter={16}>
             <Col lg={4} className="custom-form">
               <div className="title">
@@ -89,9 +102,9 @@ class RoomPlan extends React.Component {
                 Filter Information
               </div>
               <div className="form">
-                <Form onSubmit={this.handleSubmit} className="no-valid-form">
+                <Form className="no-valid-form">
                   <Form.Item {...formItemLayout} label="Information">
-                    {getFieldDecorator("information")(<Input />)}
+                    {getFieldDecorator("guestInfor")(<Input />)}
                   </Form.Item>
                   <Form.Item {...formItemLayout} label="Group Code">
                     {getFieldDecorator("groupCode")(<Input />)}
@@ -104,7 +117,7 @@ class RoomPlan extends React.Component {
                       <Select placeholder="Building">
                         {searchForm.listBuilding &&
                           searchForm.listBuilding.map(item => (
-                            <Option value={item.buildingID}>
+                            <Option value={item.buildingCode}>
                               {item.description}
                             </Option>
                           ))}
@@ -115,11 +128,16 @@ class RoomPlan extends React.Component {
                     {getFieldDecorator("floor")(
                       <Select placeholder="Floor">
                         {searchForm.listFloor &&
-                          searchForm.listFloor.map(item => (
-                            <Option value={item.floorListID}>
-                              {item.floorName}
-                            </Option>
-                          ))}
+                          searchForm.listFloor.map(
+                            item => (
+                              console.log(item),
+                              (
+                                <Option value={item.floorNum}>
+                                  {item.floorName}
+                                </Option>
+                              )
+                            )
+                          )}
                       </Select>
                     )}
                   </Form.Item>
@@ -152,10 +170,18 @@ class RoomPlan extends React.Component {
                   </Form.Item>
                   <div className="actions1" style={{ marginTop: 20 }}>
                     <div className="btns">
-                      <Button icon="delete" type="primary">
+                      <Button
+                        icon="delete"
+                        type="primary"
+                        onClick={() => this.handleReset()}
+                      >
                         Clear
                       </Button>
-                      <Button icon="search" type="primary">
+                      <Button
+                        icon="search"
+                        type="primary"
+                        onClick={() => this.handleSearch()}
+                      >
                         Browse
                       </Button>
                     </div>
@@ -175,11 +201,12 @@ class RoomPlan extends React.Component {
                   key="1"
                 >
                   <Row gutter={16}>
-                    {floorPlans.map(item => (
-                      <Col lg={8} xl={6} className="floorplan">
-                        <Room room={item} />
-                      </Col>
-                    ))}
+                    {floorPlans &&
+                      floorPlans.map(item => (
+                        <Col lg={8} xl={6} className="floorplan">
+                          <Room room={item} />
+                        </Col>
+                      ))}
                   </Row>
                 </TabPane>
                 <TabPane
