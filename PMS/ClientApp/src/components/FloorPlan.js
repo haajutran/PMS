@@ -3,7 +3,7 @@ import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { actionCreators } from "../store/FloorPlan";
 import {
-  Tabs,
+  Menu,
   Icon,
   Card,
   Row,
@@ -14,11 +14,39 @@ import {
   Button,
   Select
 } from "antd";
-const TabPane = Tabs.TabPane;
+import ArrivalIcon from "../assets/images/FloorPlan/ArrivalTD.png";
+import DueOutIcon from "../assets/images/FloorPlan/Dueout.png";
+// const TabPane = Tabs.TabPane;
 const { Meta } = Card;
 const { Option } = Select;
 
+const statuses = {
+  Inhouse: "home",
+  OOO: "stop",
+  OOI: "minus-circle",
+  ArrivalTD: "import",
+  DoeOut: "export",
+  BirthDay: "gift",
+  VIP: "star"
+};
+
 class Room extends React.Component {
+  getStatus = field => {
+    var status = field.replace(".png", "");
+    console.log(field);
+    return statuses[status];
+  };
+
+  getColor = status => {
+    if (status === "stsRoom_1.png") {
+      return "yellow";
+    } else if (status === "stsRoom_2.png") {
+      return "red";
+    } else {
+      return "#0fe87a";
+    }
+  };
+
   render() {
     const { room } = this.props;
     const from = room.ngayDen;
@@ -27,11 +55,19 @@ class Room extends React.Component {
     return (
       <Card
         title={room.loaiPhong}
-        style={{ minWidth: 250 }}
-        actions={[<Icon type="car" />, <Icon type="delete" />]}
+        // style={{ minWidth: 250 }}
+        actions={[
+          <Icon type={this.getStatus(room.trangThaiKhach)} />,
+          room.sinhNhat === true && <Icon type="gift" />,
+          room.vip === 1 && <Icon type="star" />
+        ]}
         extra={
           <span style={{ fontSize: 20 }}>
-            <b>{room.soPhong}</b> <Icon style={{ color: "red" }} type="alert" />
+            <b>{room.soPhong}</b>{" "}
+            <Icon
+              style={{ color: `${this.getColor(room.trangThaiPhong)}` }}
+              type="alert"
+            />
           </span>
         }
       >
@@ -47,7 +83,9 @@ class Room extends React.Component {
 class RoomPlan extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      currentTab: "All"
+    };
   }
 
   componentDidMount() {
@@ -76,6 +114,17 @@ class RoomPlan extends React.Component {
     this.props.form.resetFields();
   };
 
+  handleChangeTab = e => {
+    this.setState({
+      currentTab: e.key
+    });
+    this.props.form.resetFields();
+    var field = {
+      typeFolio: e.key
+    };
+    this.props.search(field);
+  };
+
   render() {
     const { getFieldDecorator } = this.props.form;
     // console.log(this.props);
@@ -89,6 +138,7 @@ class RoomPlan extends React.Component {
         sm: { span: 12 }
       }
     };
+    const { currentTab } = this.state;
     const { floorPlans, searchForm, isLoading } = this.props;
     // console.log(searchForm);
     // console.log(floorPlans);
@@ -96,7 +146,7 @@ class RoomPlan extends React.Component {
       <div className="content">
         {floorPlans && searchForm ? (
           <Row gutter={16}>
-            <Col lg={4} className="custom-form">
+            <Col lg={6} xl={5} className="custom-form">
               <div className="title">
                 <Icon type="filter" />
                 Filter Information
@@ -128,16 +178,11 @@ class RoomPlan extends React.Component {
                     {getFieldDecorator("floor")(
                       <Select placeholder="Floor">
                         {searchForm.listFloor &&
-                          searchForm.listFloor.map(
-                            item => (
-                              console.log(item),
-                              (
-                                <Option value={item.floorNum}>
-                                  {item.floorName}
-                                </Option>
-                              )
-                            )
-                          )}
+                          searchForm.listFloor.map(item => (
+                            <Option value={item.floorNum}>
+                              {item.floorName}
+                            </Option>
+                          ))}
                       </Select>
                     )}
                   </Form.Item>
@@ -189,8 +234,57 @@ class RoomPlan extends React.Component {
                 </Form>
               </div>
             </Col>
-            <Col lg={20}>
-              <Tabs defaultActiveKey="1">
+            <Col lg={18} xl={19}>
+              <Menu
+                onClick={this.handleChangeTab}
+                selectedKeys={[currentTab]}
+                mode="horizontal"
+                className="tab-menu"
+              >
+                <Menu.Item key="All">
+                  <Icon type="appstore" />
+                  ALL
+                </Menu.Item>
+                <Menu.Item key="Arrival">
+                  <Icon type="import" />
+                  ARRIVAL TODAY
+                </Menu.Item>
+                <Menu.Item key="InHouse">
+                  <Icon type="home" />
+                  IN-HOUSE
+                </Menu.Item>
+                <Menu.Item key="DoeOut">
+                  <Icon type="export" />
+                  DUE OUT
+                </Menu.Item>
+                <Menu.Item key="OOO">
+                  <Icon type="stop" />
+                  OUT OF ORDER
+                </Menu.Item>
+                <Menu.Item key="OOI">
+                  <Icon type="minus-circle" />
+                  OOI
+                </Menu.Item>
+                <Menu.Item key="BirthDay">
+                  <Icon type="gift" />
+                  BIRTHDAY
+                </Menu.Item>
+                <Menu.Item key="VIP">
+                  <Icon type="star" />
+                  VIP
+                </Menu.Item>
+              </Menu>
+              <div>
+                <Row gutter={16}>
+                  {floorPlans &&
+                    floorPlans.map(item => (
+                      <Col lg={8} xl={6} className="floorplan">
+                        <Room room={item} />
+                      </Col>
+                    ))}
+                </Row>
+              </div>
+              {/* <Tabs defaultActiveKey="1">
                 <TabPane
                   tab={
                     <span>
@@ -287,6 +381,7 @@ class RoomPlan extends React.Component {
                   VIP
                 </TabPane>
               </Tabs>
+           */}
             </Col>
           </Row>
         ) : (

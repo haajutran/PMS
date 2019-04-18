@@ -33,6 +33,9 @@
 }
 
 /* Custom Form */
+.custom-form {
+  min-width: 210px;
+}
 .custom-form h2 {
   text-align: center;
   margin-bottom: 1em;
@@ -155,4 +158,27 @@
 /* Floor Plan */
 .floorplan {
   margin-top: 2em;
+}
+.tab-menu .icon {
+  margin-top: -5px;
+  height: 15px;
+  margin-right: 10px;
+}
+
+/* Dashboard */
+.dashboard .ant-card {
+  border-radius: 10px;
+}
+.dashboard .short {
+  color: #fff;
+}
+.statistic {
+  margin-top: 2em;
+  padding: 1em 2em;
+  border-color: #e8e8e8;
+  border-radius: 10px;
+}
+.statistic .title {
+  font-size: 20px;
+  font-weight: bold;
 }

@@ -2,31 +2,44 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Menu, Icon } from "antd";
 
-const { SubMenu } = Menu;
 const MenuItemGroup = Menu.ItemGroup;
 
 export default class NavMenu extends React.Component {
   constructor(props) {
     super(props);
-
-    this.toggle = this.toggle.bind(this);
+    var selected = window.location.pathname.split("/")[1];
+    if (!selected) {
+      selected = "home";
+    }
     this.state = {
       isOpen: false,
-      keySelected: "reservation"
+      keySelected: selected
     };
   }
   componentDidMount() {}
-  toggle() {
+
+  handleChange = e => {
     this.setState({
-      isOpen: !this.state.isOpen
+      keySelected: e.key
     });
-  }
+  };
+
   render() {
     const { keySelected } = this.state;
 
     return (
-      <Menu mode="inline" selectedKeys={[keySelected]}>
+      <Menu
+        mode="inline"
+        onClick={this.handleChange}
+        selectedKeys={[keySelected]}
+      >
         <MenuItemGroup key="g1" title="">
+          <Menu.Item key="home">
+            <Link to="/">
+              <Icon type="dashboard" />
+              <span className="nav-text">Dashboard</span>
+            </Link>
+          </Menu.Item>
           <Menu.Item key="reservation">
             <Link to="/reservation">
               <Icon type="user" />

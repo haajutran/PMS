@@ -1,23 +1,121 @@
-import React from 'react';
-import { connect } from 'react-redux';
+import React from "react";
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
+import { actionCreators } from "../store/Dashboard";
+import { List, Card, Row, Col, Statistic } from "antd";
 
-const Home = props => (
-  <div>
-    <h1>Hello, world!</h1>
-    <p>Welcome to your new single-page application, built with:</p>
-    <ul>
-      <li><a href='https://get.asp.net/'>ASP.NET Core</a> and <a href='https://msdn.microsoft.com/en-us/library/67ef8sbd.aspx'>C#</a> for cross-platform server-side code</li>
-      <li><a href='https://facebook.github.io/react/'>React</a> and <a href='https://redux.js.org/'>Redux</a> for client-side code</li>
-      <li><a href='http://getbootstrap.com/'>Bootstrap</a> for layout and styling</li>
-    </ul>
-    <p>To help you get started, we've also set up:</p>
-    <ul>
-      <li><strong>Client-side navigation</strong>. For example, click <em>Counter</em> then <em>Back</em> to return here.</li>
-      <li><strong>Development server integration</strong>. In development mode, the development server from <code>create-react-app</code> runs in the background automatically, so your client-side resources are dynamically built on demand and the page refreshes when you modify any file.</li>
-      <li><strong>Efficient production builds</strong>. In production mode, development-time features are disabled, and your <code>dotnet publish</code> configuration produces minified, efficiently bundled JavaScript files.</li>
-    </ul>
-    <p>The <code>ClientApp</code> subdirectory is a standard React application based on the <code>create-react-app</code> template. If you open a command prompt in that directory, you can run <code>npm</code> commands such as <code>npm test</code> or <code>npm install</code>.</p>
-  </div>
-);
+const excludes = [
+  "Occupancy",
+  "Renuenue",
+  "PaymentAmount",
+  "RoomOccuped",
+  "hDate"
+];
 
-export default connect()(Home);
+class Home extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+
+  componentDidMount() {
+    this.props.requestDashboard();
+  }
+
+  render() {
+    const { dashboard } = this.props;
+    var keys;
+    if (dashboard) {
+      var temp = Object.keys(dashboard);
+      keys = temp.filter(function(value, index, arr) {
+        return !excludes.includes(value);
+      });
+    }
+
+    return (
+      <div className="dashboard">
+        {dashboard && (
+          <div>
+            <Row gutter={16}>
+              <Col lg={6} xl={4}>
+                <Card
+                  style={{
+                    background:
+                      "linear-gradient(to right, #aa4b6b, #6b6b83, #3b8d99)"
+                  }}
+                >
+                  <Statistic
+                    title="Occupancy"
+                    className="short"
+                    value={dashboard.Occupancy}
+                  />
+                </Card>
+              </Col>
+              <Col lg={6} xl={4}>
+                <Card
+                  style={{
+                    background: "linear-gradient(to right, #8360c3, #2ebf91)"
+                  }}
+                >
+                  <Statistic
+                    title="Renuenue"
+                    className="short"
+                    value={dashboard.Renuenue}
+                  />
+                </Card>
+              </Col>
+              <Col lg={6} xl={4}>
+                <Card
+                  style={{
+                    background: "linear-gradient(to right, #00b4db, #0083b0)"
+                  }}
+                >
+                  <Statistic
+                    title="PaymentAmount"
+                    className="short"
+                    value={dashboard.PaymentAmount}
+                  />
+                </Card>
+              </Col>
+              <Col lg={6} xl={4}>
+                <Card
+                  style={{
+                    background: "linear-gradient(to right, #11998e, #38ef7d)"
+                  }}
+                >
+                  <Statistic
+                    title="RoomOccuped"
+                    className="short"
+                    value={dashboard.RoomOccuped}
+                  />
+                </Card>
+              </Col>
+            </Row>
+
+            <List
+              className="statistic"
+              header={<div className="title">Statistic Detail</div>}
+              // footer={<div>Footer</div>}
+              bordered
+              dataSource={keys}
+              renderItem={key => (
+                <List.Item>
+                  <List.Item.Meta
+                    title={key}
+                    // description={item.email}
+                  />
+                  <div>{dashboard[key]}</div>
+                </List.Item>
+              )}
+            />
+          </div>
+        )}
+      </div>
+    );
+  }
+}
+
+export default connect(
+  state => state.dashboard,
+  dispatch => bindActionCreators(actionCreators, dispatch)
+)(Home);

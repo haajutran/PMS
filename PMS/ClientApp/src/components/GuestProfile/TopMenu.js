@@ -1,6 +1,6 @@
 import React from "react";
-import { Row, Col, Icon, Menu } from "antd";
-const SubMenu = Menu.SubMenu;
+import { Icon, Menu } from "antd";
+import { Link } from "react-router-dom";
 
 class TopMenu extends React.Component {
   render() {
@@ -15,8 +15,10 @@ class TopMenu extends React.Component {
           Refresh
         </Menu.Item>
         <Menu.Item key="plus">
-          <Icon type="plus" />
-          Add
+          <Link to="/guestProfile">
+            <Icon type="plus" />
+            Add
+          </Link>
         </Menu.Item>
         <Menu.Item key="edit">
           <Icon type="edit" />
