@@ -4,3 +4,5 @@ PMS/\.vscode/
 PMS/ClientApp/package-lock\.json
 
 PMS/package-lock\.json
+
+\.vs/
