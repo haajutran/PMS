@@ -46,7 +46,8 @@ export const actionCreators = {
     // const res = await fetch("http://180.148.1.174/api/reports/getall");
     dispatch({ type: receiveGuestProfilesType, guestProfiles: res.data });
     // console.log(aaa);
-  }
+  },
+ 
 };
 
 export const reducer = (state, action) => {

@@ -1,40 +1,47 @@
-// const requestWeatherForecastsType = 'REQUEST_WEATHER_FORECASTS';
-// const receiveWeatherForecastsType = 'RECEIVE_WEATHER_FORECASTS';
-const initialState = { forecasts: [], isLoading: false };
+import * as dataService from "../services/DataService";
+
+const requestGPFormType = "REQUEST_GP_FORM";
+const receiveGPFormType = "RECEIVE_GP_FORM";
+const initialState = { isLoading: false };
 
 export const actionCreators = {
-  //   requestWeatherForecasts: startDateIndex => async (dispatch, getState) => {
-  //     if (startDateIndex === getState().weatherForecasts.startDateIndex) {
-  //       // Don't issue a duplicate request (we already have or are loading the requested data)
-  //       return;
-  //     }
-  //     dispatch({ type: requestWeatherForecastsType, startDateIndex });
-  //     const url = `api/SampleData/WeatherForecasts?startDateIndex=${startDateIndex}`;
-  //     const response = await fetch(url);
-  //     const forecasts = await response.json();
-  //     dispatch({ type: receiveWeatherForecastsType, startDateIndex, forecasts });
-  //   }
+  requestGPForm: () => async dispatch => {
+    dispatch({ type: requestGPFormType });
+    const titleList = await dataService.get("api/api/category/getlisttitle");    
+    const vipList = await dataService.get("api/api/category/getlistVip");
+    const languageList = await dataService.get("api/api/category/getlistlanguage");
+    const countryList = await dataService.get(
+      "api/api/category/getlistcountry"
+    );
+    dispatch({
+      type: receiveGPFormType,
+      GPForm: {
+        titleList: titleList.data,
+        vipList: vipList.data,
+        countryList: countryList.data,
+        languageList: languageList.data
+      }
+    });
+  }
 };
 
 export const reducer = (state, action) => {
   state = state || initialState;
 
-  //   if (action.type === requestWeatherForecastsType) {
-  //     return {
-  //       ...state,
-  //       startDateIndex: action.startDateIndex,
-  //       isLoading: true
-  //     };
-  //   }
+  if (action.type === requestGPFormType) {
+    return {
+      ...state,
+      isLoading: true
+    };
+  }
 
-  //   if (action.type === receiveWeatherForecastsType) {
-  //     return {
-  //       ...state,
-  //       startDateIndex: action.startDateIndex,
-  //       forecasts: action.forecasts,
-  //       isLoading: false
-  //     };
-  //   }
+  if (action.type === receiveGPFormType) {
+    return {
+      ...state,
+      isLoading: false,
+      GPForm: action.GPForm
+    };
+  }
 
   return state;
 };

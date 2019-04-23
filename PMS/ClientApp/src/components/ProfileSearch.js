@@ -96,14 +96,14 @@ class ProfileSearch extends React.Component {
         xs: { span: 24 },
         sm: { span: 12 }
       }
-    };
+    };     
     return (
       <div>
         <TopMenu />
         <div className="content">
           {guestProfiles && searchGPForm && (
-            <Row>
-              <Col lg={4} className="custom-form">
+            <Row gutter={16}>
+              <Col lg={8} xl={6} className="custom-form">
                 <div className="title">
                   <Icon type="filter" />
                   Filter Information
@@ -165,7 +165,7 @@ class ProfileSearch extends React.Component {
                   </Form>
                 </div>
               </Col>
-              <Col lg={20}>
+              <Col lg={24} xl={18}>
                 <Table
                   columns={columns}
                   dataSource={guestProfiles}
