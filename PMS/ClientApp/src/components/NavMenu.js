@@ -76,7 +76,7 @@ export default class NavMenu extends React.Component {
           </Menu.Item>
           <Menu.Item key="guestProfile">
             <Link to="/profileSearch">
-              <Icon type="upload" />
+              <Icon type="user" />
               <span className="nav-text">Guest Profile</span>
             </Link>
           </Menu.Item>

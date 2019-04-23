@@ -4,6 +4,7 @@ import { routerReducer, routerMiddleware } from "react-router-redux";
 
 import * as Reservation from "./Reservation";
 import * as GuestSearch from "./GuestSearch";
+import * as ProfileSearch from "./ProfileSearch";
 import * as FloorPlan from "./FloorPlan";
 import * as Dashboard from "./Dashboard";
 
@@ -14,6 +15,7 @@ export default function configureStore(history, initialState) {
   const reducers = {
     reservation: Reservation.reducer,
     guestSearch: GuestSearch.reducer,
+    profileSearch: ProfileSearch.reducer,
     floorPlan: FloorPlan.reducer,
     dashboard: Dashboard.reducer,
 

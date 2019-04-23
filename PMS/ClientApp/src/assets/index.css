@@ -86,7 +86,9 @@
 .content {
   /* margin: 2em 0; */
 }
-
+.no-valid-form.c2 .ant-form-item-label label {
+  margin-top: 3px;
+}
 .custom-form .title {
   color: #fff;
   font-size: 16px;
