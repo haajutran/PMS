@@ -109,8 +109,14 @@ class ProfileSearch extends React.Component {
                   Filter Information
                 </div>
                 <div className="form">
-                  <Form onSubmit={this.handleSubmit} className="no-valid-form">
-                    <Form.Item {...formItemLayout} label="Guest Information">
+                  <Form
+                    onSubmit={this.handleSubmit}
+                    className="no-valid-form"
+                  >
+                    <Form.Item
+                      {...formItemLayout}
+                      label="Guest Information"
+                    >
                       {getFieldDecorator("GuestInformation")(<Input />)}
                     </Form.Item>
                     <Form.Item {...formItemLayout} label="Passport No">
@@ -167,6 +173,7 @@ class ProfileSearch extends React.Component {
               </Col>
               <Col lg={24} xl={18}>
                 <Table
+                  scroll={{ x: 1300 }}
                   columns={columns}
                   dataSource={guestProfiles}
                   onChange={() => this.onChange()}

@@ -2,13 +2,14 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Layout, Menu, Icon, Avatar } from "antd";
 import NavMenu from "./NavMenu";
+import ScrollArea from "react-scrollbar";
 import logo from "../assets/images/logo.png";
 const { SubMenu } = Menu;
 const { Header, Content, Footer, Sider } = Layout;
 
 class MainLayout extends React.Component {
   state = {
-    collapsed: true
+    collapsed: false
   };
 
   toggle = () => {
@@ -41,7 +42,9 @@ class MainLayout extends React.Component {
                 </Link>
               )}
             </div>
-            <NavMenu />
+            <ScrollArea>
+              <NavMenu />
+            </ScrollArea>
           </Sider>
           <Layout style={{ marginLeft: collapsed ? 79 : 250 }}>
             <Header
@@ -60,7 +63,10 @@ class MainLayout extends React.Component {
               >
                 Hậu
               </span>
-              <Avatar icon="user" style={{ marginTop: 15, float: "right" }} />
+              <Avatar
+                icon="user"
+                style={{ marginTop: 15, float: "right" }}
+              />
               <Icon
                 className="trigger"
                 type={this.state.collapsed ? "menu-unfold" : "menu-fold"}

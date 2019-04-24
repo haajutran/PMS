@@ -13,13 +13,21 @@ export const actionCreators = {
     const countryList = await dataService.get(
       "api/api/category/getlistcountry"
     );
+    const entryPurposeList = await dataService.get(
+      "api/api/category/getListPorts"
+    );
+    const entryPortList = await dataService.get(
+      "api/api/category/getListEntryport"
+    );
     dispatch({
       type: receiveGPFormType,
       GPForm: {
         titleList: titleList.data,
         vipList: vipList.data,
         countryList: countryList.data,
-        languageList: languageList.data
+        languageList: languageList.data,
+        entryPurposeList: entryPurposeList.data,
+        entryPortList: entryPortList.data
       }
     });
   }
