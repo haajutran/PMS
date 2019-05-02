@@ -2,10 +2,11 @@ import * as dataService from "../services/DataService";
 
 const requestGPFormType = "REQUEST_GP_FORM";
 const receiveGPFormType = "RECEIVE_GP_FORM";
-const initialState = { isLoading: false };
+
+const initialState = { isLoading: false, isSaving: false };
 
 export const actionCreators = {
-  requestGPForm: () => async dispatch => {
+  requestGPForm: (idr) => async dispatch => {
     dispatch({ type: requestGPFormType });
     const titleList = await dataService.get("api/api/category/getlisttitle");    
     const vipList = await dataService.get("api/api/category/getlistVip");
@@ -30,6 +31,13 @@ export const actionCreators = {
         entryPortList: entryPortList.data
       }
     });
+  },
+  saveProfile: (data) => async () => {
+    const saveProfileRes = await dataService.post(
+      "api/api/ProfileGuest/SaveProfile", data
+    );
+    console.log(saveProfileRes)
+    return saveProfileRes.status;
   }
 };
 

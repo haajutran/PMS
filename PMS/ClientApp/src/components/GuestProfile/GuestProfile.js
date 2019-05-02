@@ -193,6 +193,14 @@ const GuestProfileForm = Form.create({
       Placeofwork: Form.createFormField({
         ...props.Placeofwork,
         value: props.Placeofwork.value
+      }),
+      BlackList: Form.createFormField({
+        ...props.BlackList,
+        value: props.BlackList.value
+      }),
+      BlackListReason: Form.createFormField({
+        ...props.BlackListReason,
+        value: props.BlackListReason.value
       })
     };
   },
@@ -204,20 +212,19 @@ const GuestProfileForm = Form.create({
     labelCol: {
       xs: { span: 24 },
       sm: { span: 8 },
-      xl: { span: 6 }
+      xl: { span: 8 }
     },
     wrapperCol: {
       xs: { span: 24 },
       sm: { span: 16 },
-      xl: { span: 18 }
+      xl: { span: 16 }
     }
   };
-  console.log(props.GPForm);
   return (
     <Form {...formItemLayout} className="custom-form">
       {GPForm && (
         <Row>
-          <Col md={24} xl={10}>
+          <Col md={24} xl={12}>
             <h2>Guest Profile</h2>
             <Form.Item label="Last Name">
               {getFieldDecorator("LastName", {
@@ -285,9 +292,7 @@ const GuestProfileForm = Form.create({
                 <Select placeholder="Country/Residence">
                   <Option value="">Select Country</Option>
                   {GPForm.countryList.map(item => (
-                    <Option value={item.countryCode}>
-                      {item.description}
-                    </Option>
+                    <Option value={item.countryCode}>{item.description}</Option>
                   ))}
                 </Select>
               )}
@@ -299,9 +304,7 @@ const GuestProfileForm = Form.create({
                 <Select placeholder="National">
                   <Option value="">Select National</Option>
                   {GPForm.countryList.map(item => (
-                    <Option value={item.countryCode}>
-                      {item.description}
-                    </Option>
+                    <Option value={item.countryCode}>{item.description}</Option>
                   ))}
                 </Select>
               )}
@@ -366,7 +369,7 @@ const GuestProfileForm = Form.create({
               })(<TextArea />)}
             </Form.Item>
           </Col>
-          <Col md={24} xl={10}>
+          <Col md={24} xl={12}>
             <h2>More Information</h2>
             <Form.Item label="Mobile">
               {getFieldDecorator("Mobi", {
@@ -451,9 +454,7 @@ const GuestProfileForm = Form.create({
                 <Select placeholder="Entry Purpose">
                   <Option value="">Select Entry Purpose</Option>
                   {GPForm.entryPurposeList.map(item => (
-                    <Option value={item.purposeCode}>
-                      {item.description}
-                    </Option>
+                    <Option value={item.purposeCode}>{item.description}</Option>
                   ))}
                 </Select>
               )}
@@ -475,9 +476,7 @@ const GuestProfileForm = Form.create({
                 <Select placeholder="Entry Port of Entry">
                   <Option value="">Select Port of Entry</Option>
                   {GPForm.entryPortList.map(item => (
-                    <Option value={item.portCode}>
-                      {item.description}
-                    </Option>
+                    <Option value={item.portCode}>{item.description}</Option>
                   ))}
                 </Select>
               )}
@@ -492,24 +491,13 @@ const GuestProfileForm = Form.create({
                 rules: [{}]
               })(<Input />)}
             </Form.Item>
-          </Col>
-          {/* <Col md={24} xl={4}>
-          <div className="actions1">
-            <div className="btns">
-              <Button icon="delete" type="primary">
-                Clear
-              </Button>
-              <Button icon="search" type="primary">
-                Browse
-              </Button>
-            </div>
-            <Form.Item>
-              {getFieldDecorator("blackList", {})(
-                <Checkbox>Black list</Checkbox>
-              )}
+            <Form.Item label="Blacklist">
+              {getFieldDecorator("BlackList", {})(<Checkbox />)}
             </Form.Item>
-          </div>
-        </Col> */}
+            <Form.Item label="Black List Reason">
+              {getFieldDecorator("BlackListReason", {})(<TextArea />)}
+            </Form.Item>
+          </Col>
         </Row>
       )}
     </Form>
@@ -527,11 +515,15 @@ class GuestProfile extends React.Component {
   }
 
   componentDidMount() {
-    this.props.requestGPForm();
+    const idr = this.props.location.pathname.split("/")[2];
+    this.props.requestGPForm(idr);
   }
 
   updateFields = data => {
     newFields = {
+      Idg: {
+        value: 0
+      },
       LastName: {
         value: ""
       },
@@ -648,6 +640,12 @@ class GuestProfile extends React.Component {
       },
       Placeofwork: {
         value: ""
+      },
+      BlackList: {
+        value: false
+      },
+      BlackListReason: {
+        value: ""
       }
     };
     this.setState(({ fields }) => ({
@@ -664,10 +662,11 @@ class GuestProfile extends React.Component {
   onSubmit = () => {
     this.form.validateFields((err, values) => {
       if (!err) {
-        console.log(values);
+        this.props.saveProfile(values);
       }
     });
   };
+
   render() {
     const { data, GPForm } = this.props;
     const fields = this.state.fields;

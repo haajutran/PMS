@@ -1,9 +1,21 @@
 import React from "react";
 import { bindActionCreators } from "redux";
+import {  Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { actionCreators } from "../store/ProfileSearch";
 import TopMenu from "./GuestProfile/TopMenu";
-import { Row, Col, Icon, Input, Form, Table, Button, Select } from "antd";
+import {
+  Row,
+  Col,
+  Icon,
+  Input,
+  Form,
+  Table,
+  Button,
+  Select,
+  message,
+  Menu
+} from "antd";
 const Option = Select.Option;
 const columns = [
   {
@@ -60,7 +72,9 @@ const columns = [
 class ProfileSearch extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      selectedRows: []
+    };
   }
   componentDidMount() {
     this.props.requestGuestProfiles();
@@ -83,9 +97,31 @@ class ProfileSearch extends React.Component {
   handleReset = () => {
     this.props.form.resetFields();
   };
+
+  hendleEdit = () => {
+    this.props.history.push(`/guestProfile?idr=1`);
+    // const { selectedRows } = this.state;
+
+    // if (selectedRows.length === 0 || selectedRows.length > 1) {
+    //   message.warning("Select one profile to edit, please!");
+    // } else {
+      
+    // }
+  };
+
+  onSelectChange = selectedRowKeys => {
+    this.setState({ selectedRowKeys });
+  };
+
   render() {
     const { guestProfiles, searchGPForm } = this.props;
-
+    const rowSelection = {
+      onChange: (selectedRowKeys, selectedRows) => {
+        this.setState({
+          selectedRows
+        });
+      }
+    };
     const { getFieldDecorator } = this.props.form;
     const formItemLayout = {
       labelCol: {
@@ -96,27 +132,52 @@ class ProfileSearch extends React.Component {
         xs: { span: 24 },
         sm: { span: 12 }
       }
-    };     
+    };
     return (
       <div>
-        <TopMenu />
+        <Menu
+          // onClick={this.handleClick}
+          selectedKeys={[0]}
+          mode="horizontal"
+        >
+          <Menu.Item key="sync">
+            <Icon type="sync" />
+            Refresh
+          </Menu.Item>
+          <Menu.Item key="plus">
+            <Link to="/guestProfile">
+              <Icon type="plus" />
+              Add
+            </Link>
+          </Menu.Item>
+          <Menu.Item key="edit" onClick={() => this.hendleEdit()}>
+            <Icon type="edit" />
+            Edit
+          </Menu.Item>
+          <Menu.Item key="cancel">
+            <Icon type="stop" />
+            Cancel
+          </Menu.Item>
+          <Menu.Item key="swap">
+            <Icon type="swap" />
+            Merge
+          </Menu.Item>
+          <Menu.Item key="snippets">
+            <Icon type="snippets" />
+            Search Duplicate
+          </Menu.Item>
+        </Menu>
         <div className="content">
           {guestProfiles && searchGPForm && (
             <Row gutter={16}>
-              <Col lg={8} xl={6} className="custom-form">
+              {/* <Col lg={8} xl={6} className="custom-form">
                 <div className="title">
                   <Icon type="filter" />
                   Filter Information
                 </div>
                 <div className="form">
-                  <Form
-                    onSubmit={this.handleSubmit}
-                    className="no-valid-form"
-                  >
-                    <Form.Item
-                      {...formItemLayout}
-                      label="Guest Information"
-                    >
+                  <Form onSubmit={this.handleSubmit} className="no-valid-form">
+                    <Form.Item {...formItemLayout} label="Guest Information">
                       {getFieldDecorator("GuestInformation")(<Input />)}
                     </Form.Item>
                     <Form.Item {...formItemLayout} label="Passport No">
@@ -170,9 +231,10 @@ class ProfileSearch extends React.Component {
                     </div>
                   </Form>
                 </div>
-              </Col>
-              <Col lg={24} xl={18}>
+              </Col> */}
+              <Col lg={24} xl={24}>
                 <Table
+                  rowSelection={rowSelection}
                   scroll={{ x: 1300 }}
                   columns={columns}
                   dataSource={guestProfiles}
