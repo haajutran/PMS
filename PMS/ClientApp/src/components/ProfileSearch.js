@@ -1,6 +1,6 @@
 import React from "react";
 import { bindActionCreators } from "redux";
-import {  Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { actionCreators } from "../store/ProfileSearch";
 import TopMenu from "./GuestProfile/TopMenu";
@@ -14,9 +14,11 @@ import {
   Button,
   Select,
   message,
-  Menu
+  Menu,
+  Spin
 } from "antd";
 const Option = Select.Option;
+const antIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
 const columns = [
   {
     title: "Profile Num",
@@ -99,14 +101,14 @@ class ProfileSearch extends React.Component {
   };
 
   hendleEdit = () => {
-    this.props.history.push(`/guestProfile?idr=1`);
-    // const { selectedRows } = this.state;
+    const { selectedRows } = this.state;
 
-    // if (selectedRows.length === 0 || selectedRows.length > 1) {
-    //   message.warning("Select one profile to edit, please!");
-    // } else {
-      
-    // }
+    if (selectedRows.length === 0 || selectedRows.length > 1) {
+      message.warning("Select one profile to edit, please!");
+    } else {
+      const idg = selectedRows[0].idG;
+      this.props.history.push(`/guestProfile/${idg}`);
+    }
   };
 
   onSelectChange = selectedRowKeys => {
@@ -114,7 +116,7 @@ class ProfileSearch extends React.Component {
   };
 
   render() {
-    const { guestProfiles, searchGPForm } = this.props;
+    const { guestProfiles, searchGPForm, isLoading } = this.props;
     const rowSelection = {
       onChange: (selectedRowKeys, selectedRows) => {
         this.setState({
@@ -168,82 +170,87 @@ class ProfileSearch extends React.Component {
           </Menu.Item>
         </Menu>
         <div className="content">
-          {guestProfiles && searchGPForm && (
-            <Row gutter={16}>
-              {/* <Col lg={8} xl={6} className="custom-form">
-                <div className="title">
-                  <Icon type="filter" />
-                  Filter Information
+          {isLoading ? (
+            <Spin className="loading-area" indicator={antIcon} />
+          ) : (
+            guestProfiles &&
+            searchGPForm && (
+              <Row gutter={16}>
+                {/* <Col lg={8} xl={6} className="custom-form">
+            <div className="title">
+              <Icon type="filter" />
+              Filter Information
+            </div>
+            <div className="form">
+              <Form onSubmit={this.handleSubmit} className="no-valid-form">
+                <Form.Item {...formItemLayout} label="Guest Information">
+                  {getFieldDecorator("GuestInformation")(<Input />)}
+                </Form.Item>
+                <Form.Item {...formItemLayout} label="Passport No">
+                  {getFieldDecorator("PassportNo")(<Input />)}
+                </Form.Item>
+                <Form.Item {...formItemLayout} label="Visa No">
+                  {getFieldDecorator("VisaNo")(<Input />)}
+                </Form.Item>
+                <Form.Item {...formItemLayout} label="Email">
+                  {getFieldDecorator("Email")(<Input />)}
+                </Form.Item>
+                <Form.Item {...formItemLayout} label="Country">
+                  {getFieldDecorator("Country")(
+                    <Select>
+                      {searchGPForm.countryList.map(item => (
+                        <Option value={item.countryCode}>
+                          {item.description}
+                        </Option>
+                      ))}
+                    </Select>
+                  )}
+                </Form.Item>
+                <Form.Item {...formItemLayout} label="VIP">
+                  {getFieldDecorator("VIP")(
+                    <Select>
+                      {searchGPForm.vipList.map(item => (
+                        <Option value={item.vipcode}>
+                          {item.description}
+                        </Option>
+                      ))}
+                    </Select>
+                  )}
+                </Form.Item>
+                <div className="actions1" style={{ marginTop: 20 }}>
+                  <div className="btns">
+                    <Button
+                      icon="delete"
+                      type="primary"
+                      onClick={() => this.handleReset()}
+                    >
+                      Clear
+                    </Button>
+                    <Button
+                      icon="search"
+                      type="primary"
+                      onClick={() => this.handleSearch()}
+                    >
+                      Browse
+                    </Button>
+                  </div>
                 </div>
-                <div className="form">
-                  <Form onSubmit={this.handleSubmit} className="no-valid-form">
-                    <Form.Item {...formItemLayout} label="Guest Information">
-                      {getFieldDecorator("GuestInformation")(<Input />)}
-                    </Form.Item>
-                    <Form.Item {...formItemLayout} label="Passport No">
-                      {getFieldDecorator("PassportNo")(<Input />)}
-                    </Form.Item>
-                    <Form.Item {...formItemLayout} label="Visa No">
-                      {getFieldDecorator("VisaNo")(<Input />)}
-                    </Form.Item>
-                    <Form.Item {...formItemLayout} label="Email">
-                      {getFieldDecorator("Email")(<Input />)}
-                    </Form.Item>
-                    <Form.Item {...formItemLayout} label="Country">
-                      {getFieldDecorator("Country")(
-                        <Select>
-                          {searchGPForm.countryList.map(item => (
-                            <Option value={item.countryCode}>
-                              {item.description}
-                            </Option>
-                          ))}
-                        </Select>
-                      )}
-                    </Form.Item>
-                    <Form.Item {...formItemLayout} label="VIP">
-                      {getFieldDecorator("VIP")(
-                        <Select>
-                          {searchGPForm.vipList.map(item => (
-                            <Option value={item.vipcode}>
-                              {item.description}
-                            </Option>
-                          ))}
-                        </Select>
-                      )}
-                    </Form.Item>
-                    <div className="actions1" style={{ marginTop: 20 }}>
-                      <div className="btns">
-                        <Button
-                          icon="delete"
-                          type="primary"
-                          onClick={() => this.handleReset()}
-                        >
-                          Clear
-                        </Button>
-                        <Button
-                          icon="search"
-                          type="primary"
-                          onClick={() => this.handleSearch()}
-                        >
-                          Browse
-                        </Button>
-                      </div>
-                    </div>
-                  </Form>
-                </div>
-              </Col> */}
-              <Col lg={24} xl={24}>
-                <Table
-                  rowSelection={rowSelection}
-                  scroll={{ x: 1300 }}
-                  columns={columns}
-                  dataSource={guestProfiles}
-                  onChange={() => this.onChange()}
-                  className="custom-table"
-                  pagination={{ defaultPageSize: 50 }}
-                />
-              </Col>
-            </Row>
+              </Form>
+            </div>
+          </Col> */}
+                <Col lg={24} xl={24}>
+                  <Table
+                    rowSelection={rowSelection}
+                    scroll={{ x: 1300 }}
+                    columns={columns}
+                    dataSource={guestProfiles}
+                    onChange={() => this.onChange()}
+                    className="custom-table"
+                    pagination={{ defaultPageSize: 50 }}
+                  />
+                </Col>
+              </Row>
+            )
           )}
         </div>
       </div>

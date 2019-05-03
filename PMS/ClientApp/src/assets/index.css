@@ -184,3 +184,10 @@
   font-size: 20px;
   font-weight: bold;
 }
+
+.loading-area {
+  width: 100%;
+  padding: 2em;
+  font-size: 20px;
+  text-align: center;
+}

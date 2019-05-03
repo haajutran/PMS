@@ -507,149 +507,165 @@ const GuestProfileForm = Form.create({
 class GuestProfile extends React.Component {
   constructor(props) {
     super(props);
-    const { data } = props;
-    this.updateFields(data);
+
     this.state = {
-      fields: newFields
+      fields: newFields,
+      isLoaded: false
     };
   }
 
   componentDidMount() {
-    const idr = this.props.location.pathname.split("/")[2];
-    this.props.requestGPForm(idr);
+    const id = this.props.location.pathname.split("/")[2];
+    this.props.requestGPForm(id);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { isLoading, profile } = nextProps;
+    if (!isLoading) {
+      this.updateFields(profile);
+    }
   }
 
   updateFields = data => {
+    console.log(data);
     newFields = {
       Idg: {
         value: 0
       },
       LastName: {
-        value: ""
+        value: data ? data.lastName : ""
       },
       FirstName: {
-        value: ""
+        value: data ? data.firstName : ""
       },
       Sex: {
-        value: false
+        value: data ? data.sex : false
       },
       GTitleCode: {
-        value: ""
+        value: data ? data.gTitleCode : ""
       },
       VIPcode: {
-        value: ""
+        value: data ? data.viPcode : ""
       },
       LanguegeCode: {
-        value: ""
+        value: data ? data.languegeCode : ""
       },
       GCountryCode: {
-        value: ""
+        value: data ? data.gCountryCode : ""
       },
       NationalCode: {
-        value: ""
+        value: data ? data.nationalCode : ""
       },
       PostCode: {
-        value: ""
+        value: data ? data.postCode : ""
       },
       Passportypecode: {
-        value: ""
+        value: data ? data.passportypecode : ""
       },
       IDPassportNo: {
-        value: ""
+        value: data ? data.idPassportNo : ""
       },
       Dateofbirth: {
-        value: ""
+        value: data ? moment("7/6/2018", "dd/MM/yyyy").local() : ""
+        // data.dateofbirth
       },
       Placeofbirth: {
-        value: ""
+        value: data ? data.placeofbirth : ""
       },
       Address1: {
-        value: ""
+        value: data ? data.address1 : ""
       },
       Address2: {
-        value: ""
+        value: data ? data.address2 : ""
       },
       DateofissueP: {
-        value: ""
+        value: data ? moment() : ""
+        // data.dateofissueP
       },
       PlaceofissueP: {
-        value: ""
+        value: data ? data.placeofissueP : ""
       },
       Dateofexpiry: {
-        value: ""
+        value: data ? moment() : ""
+        // data.dateofexpiry
       },
       NoticeG: {
-        value: ""
+        value: data ? data.noticeG : ""
       },
       Mobi: {
-        value: ""
+        value: data ? data.mobi : ""
       },
       Tel: {
-        value: ""
+        value: data ? data.tel : ""
       },
       Email: {
-        value: ""
+        value: data ? data.email : ""
       },
       CompanyGuest: {
-        value: ""
+        value: data ? data.companyGuest : ""
       },
       CompanyAdd: {
-        value: ""
+        value: data ? data.companyAdd : ""
       },
       VATCode: {
-        value: ""
+        value: data ? data.vatCode : ""
       },
       CreditCardNum: {
-        value: ""
+        value: data ? data.creditCardNum : ""
       },
       CreditCardExpireTime: {
-        value: ""
+        value: data ? data.creditCardExpireTime : ""
       },
       CreditCardSecureCode: {
-        value: ""
+        value: data ? data.creditCardSecureCode : ""
       },
       Visatype: {
-        value: ""
+        value: data ? data.visatype : ""
       },
       VisaNo: {
-        value: ""
+        value: data ? data.visaNo : ""
       },
       DateofissueV: {
-        value: ""
+        value: data ? moment() : ""
+        // data.dateofissueV
       },
       DateofexpiryV: {
-        value: ""
+        value: data ? moment() : ""
+        // data.dateofexpiryV
       },
       PlaceofissueV: {
-        value: ""
+        value: data ? data.placeofissueV : ""
       },
       Entrypurpose: {
-        value: ""
+        value: data ? data.entrypurpose : ""
       },
       DateofEntry: {
-        value: ""
+        value: data ? moment("7/6/2018", "dd/MM/yyyy").local() : ""
+        // data.dateofEntry
       },
       Stayuntil: {
-        value: ""
+        value: data ? moment() : ""
+        // data.stayuntil
       },
       CheckpointV: {
-        value: ""
+        value: data ? data.checkpointV : ""
       },
       Occupation: {
-        value: ""
+        value: data ? data.occupation : ""
       },
       Placeofwork: {
-        value: ""
+        value: data ? data.placeofwork : ""
       },
       BlackList: {
-        value: false
+        value: data ? data.blackList : false
       },
       BlackListReason: {
-        value: ""
+        value: data ? data.blackListReason : ""
       }
     };
     this.setState(({ fields }) => ({
-      fields: { ...fields, ...newFields }
+      fields: { ...fields, ...newFields },
+      isLoaded: true
     }));
   };
 
@@ -662,27 +678,39 @@ class GuestProfile extends React.Component {
   onSubmit = () => {
     this.form.validateFields((err, values) => {
       if (!err) {
-        this.props.saveProfile(values);
+        this.props.saveProfile(values).then(res => {
+          if (res === 200) {
+            this.form.resetFields();
+            message.success("Profile is saved!");
+          } else {
+            message.error("Failed to save profile!");
+          }
+        });
       }
     });
   };
 
   render() {
-    const { data, GPForm } = this.props;
+    const { GPForm, profile } = this.props;
+    const { isLoaded } = this.state;
     const fields = this.state.fields;
     return (
       <div>
-        <GuestProfileForm
-          {...fields}
-          onChange={this.handleFormChange}
-          ref={form => (this.form = form)}
-          GPForm={GPForm}
-        />
-        <div style={{ textAlign: "center" }}>
-          <Button onClick={this.onSubmit} type="primary">
-            Save
-          </Button>
-        </div>
+        {isLoaded && (
+          <div>
+            <GuestProfileForm
+              {...fields}
+              onChange={this.handleFormChange}
+              ref={form => (this.form = form)}
+              GPForm={GPForm}
+            />
+            <div style={{ textAlign: "center" }}>
+              <Button onClick={this.onSubmit} type="primary">
+                Save
+              </Button>
+            </div>
+          </div>
+        )}
       </div>
     );
   }
