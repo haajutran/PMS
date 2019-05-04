@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Layout, Menu, Icon, Avatar } from "antd";
 import NavMenu from "./NavMenu";
 import ScrollArea from "react-scrollbar";
-import logo from "../assets/images/logo.png";
+// import logo from "../assets/images/logo.png";
 const { SubMenu } = Menu;
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -38,7 +38,7 @@ class MainLayout extends React.Component {
             <div className="logo">
               {!collapsed && (
                 <Link to="/">
-                  <img src={logo} />
+                  <img src="https://lh3.googleusercontent.com/a_vD5pkTqyXy8VCGYwyu_JzaKBY7L-MtMmQx9qA8di9DljRp5ZfcgyQ38NprLXygIaiFGq9wLyZtz7idC-0kA31lYsWQmFxDnzsFH43HGotSvqWdNoEXmjtZHBWprEpCy2IAMZfD2KBNwlQAx2dk7azQLW5ARVWZlKSRVbxLxYKH6LUU6yzeCpgPWWSvMwm2yrarAdY9L8mWETiqJyiizqsCz4aDP9so5GRdAP7z4tdIP2mr8gwCrrHMI6KLTqE0J5_o6RvyzXEZRMdBPmRVX3l-r3UmHgP6FEmol-BZhrI8ZkDsTXM9E7WuoEyTOyJQQnYRn-m-ozT2Bc_VNROR3ZvQW2nZZxKnkm2Vipb47NN5m1m8YK98PEBJvU-ZSDa7Kfb69LBqMM4RqmkUFCoRlNMcq1PO-C_ndF715fLAudeZ7mkYP-gki5-ptFwOOXHzk7PacwT2TgsbLQX3szhem83Nlo3RnRIrndfr_SBxdzelbZNKMne7cq-iflwXf6lj7cDckDZ54yi2qph45fOcyfIoWaowdf3JG1HgQnvPf_EgOuN464BpE12ihIMxutULLV9CaWaH6VATSviI7yCqR9AeWQ4VD0Vmg0idoxLUwL9OevtfgzNTrqi2pJlvXeiiM_HXLbvKsfHMbq22cXccVZSxvBYrIpw=w221-h89-no" />
                 </Link>
               )}
             </div>
@@ -63,10 +63,7 @@ class MainLayout extends React.Component {
               >
                 Hậu
               </span>
-              <Avatar
-                icon="user"
-                style={{ marginTop: 15, float: "right" }}
-              />
+              <Avatar icon="user" style={{ marginTop: 15, float: "right" }} />
               <Icon
                 className="trigger"
                 type={this.state.collapsed ? "menu-unfold" : "menu-fold"}

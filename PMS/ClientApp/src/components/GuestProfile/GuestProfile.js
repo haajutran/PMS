@@ -38,6 +38,10 @@ const GuestProfileForm = Form.create({
     // console.log(props);
 
     return {
+      Idg: Form.createFormField({
+        ...props.Idg,
+        value: props.Idg.value
+      }),
       LastName: Form.createFormField({
         ...props.LastName,
         value: props.LastName.value
@@ -206,7 +210,7 @@ const GuestProfileForm = Form.create({
   },
   onValuesChange(_, values) {}
 })(props => {
-  const { getFieldDecorator } = props.form;
+  const { getFieldDecorator, getFieldValue } = props.form;
   const { GPForm } = props;
   const formItemLayout = {
     labelCol: {
@@ -226,6 +230,14 @@ const GuestProfileForm = Form.create({
         <Row>
           <Col md={24} xl={12}>
             <h2>Guest Profile</h2>
+            {getFieldValue("Idg") && (
+              <Form.Item label="ID">
+                {getFieldDecorator("Idg", {
+                  rules: []
+                })(<Input disabled />)}
+              </Form.Item>
+            )}
+
             <Form.Item label="Last Name">
               {getFieldDecorator("LastName", {
                 rules: [
@@ -523,14 +535,18 @@ class GuestProfile extends React.Component {
     const { isLoading, profile } = nextProps;
     if (!isLoading) {
       this.updateFields(profile);
+      if (profile && profile.dateofbirth) {
+        var dob = moment(profile.dateofbirth, "DD/MM/YYYY").toDate();
+        age = moment().diff(dob, "years");
+      }
     }
   }
 
   updateFields = data => {
-    console.log(data);
+    const id = this.props.location.pathname.split("/")[2];
     newFields = {
       Idg: {
-        value: 0
+        value: id
       },
       LastName: {
         value: data ? data.lastName : ""
@@ -566,8 +582,11 @@ class GuestProfile extends React.Component {
         value: data ? data.idPassportNo : ""
       },
       Dateofbirth: {
-        value: data ? moment("7/6/2018", "dd/MM/yyyy").local() : ""
-        // data.dateofbirth
+        value: data
+          ? data.dateofbirth
+            ? moment(data.dateofbirth, "DD/MM/YYYY")
+            : ""
+          : ""
       },
       Placeofbirth: {
         value: data ? data.placeofbirth : ""
@@ -579,15 +598,21 @@ class GuestProfile extends React.Component {
         value: data ? data.address2 : ""
       },
       DateofissueP: {
-        value: data ? moment() : ""
-        // data.dateofissueP
+        value: data
+          ? data.dateofissueP
+            ? moment(data.dateofissueP, "DD/MM/YYYY")
+            : ""
+          : ""
       },
       PlaceofissueP: {
         value: data ? data.placeofissueP : ""
       },
       Dateofexpiry: {
-        value: data ? moment() : ""
-        // data.dateofexpiry
+        value: data
+          ? data.dateofexpiry
+            ? moment(data.dateofexpiry, "DD/MM/YYYY")
+            : ""
+          : ""
       },
       NoticeG: {
         value: data ? data.noticeG : ""
@@ -614,7 +639,11 @@ class GuestProfile extends React.Component {
         value: data ? data.creditCardNum : ""
       },
       CreditCardExpireTime: {
-        value: data ? data.creditCardExpireTime : ""
+        value: data
+          ? data.creditCardExpireTime
+            ? moment(data.creditCardExpireTime, "DD/MM/YYYY")
+            : ""
+          : ""
       },
       CreditCardSecureCode: {
         value: data ? data.creditCardSecureCode : ""
@@ -626,12 +655,18 @@ class GuestProfile extends React.Component {
         value: data ? data.visaNo : ""
       },
       DateofissueV: {
-        value: data ? moment() : ""
-        // data.dateofissueV
+        value: data
+          ? data.dateofissueV
+            ? moment(data.dateofissueV, "DD/MM/YYYY")
+            : ""
+          : ""
       },
       DateofexpiryV: {
-        value: data ? moment() : ""
-        // data.dateofexpiryV
+        value: data
+          ? data.dateofexpiryV
+            ? moment(data.dateofexpiryV, "DD/MM/YYYY")
+            : ""
+          : ""
       },
       PlaceofissueV: {
         value: data ? data.placeofissueV : ""
@@ -640,12 +675,18 @@ class GuestProfile extends React.Component {
         value: data ? data.entrypurpose : ""
       },
       DateofEntry: {
-        value: data ? moment("7/6/2018", "dd/MM/yyyy").local() : ""
-        // data.dateofEntry
+        value: data
+          ? data.dateofissueV
+            ? moment(data.dateofEntry, "DD/MM/YYYY")
+            : ""
+          : ""
       },
       Stayuntil: {
-        value: data ? moment() : ""
-        // data.stayuntil
+        value: data
+          ? data.stayuntil
+            ? moment(data.stayuntil, "DD/MM/YYYY")
+            : ""
+          : ""
       },
       CheckpointV: {
         value: data ? data.checkpointV : ""
@@ -678,9 +719,35 @@ class GuestProfile extends React.Component {
   onSubmit = () => {
     this.form.validateFields((err, values) => {
       if (!err) {
+        if (values.Dateofbirth) {
+          values.Dateofbirth = values.Dateofbirth.format("DD/MM/YYYY");
+        }
+        if (values.DateofissueP) {
+          values.DateofissueP = values.DateofissueP.format("DD/MM/YYYY");
+        }
+        if (values.CreditCardExpireTime) {
+          values.CreditCardExpireTime = values.CreditCardExpireTime.format(
+            "DD/MM/YYYY"
+          );
+        }
+        if (values.Dateofexpiry) {
+          values.Dateofexpiry = values.Dateofexpiry.format("DD/MM/YYYY");
+        }
+        if (values.DateofissueV) {
+          values.DateofissueV = values.DateofissueV.format("DD/MM/YYYY");
+        }
+        if (values.DateofexpiryV) {
+          values.DateofexpiryV = values.DateofexpiryV.format("DD/MM/YYYY");
+        }
+        if (values.DateofEntry) {
+          values.DateofEntry = values.DateofEntry.format("DD/MM/YYYY");
+        }
+        if (values.Stayuntil) {
+          values.Stayuntil = values.Stayuntil.format("DD/MM/YYYY");
+        }
+        console.log(values);
         this.props.saveProfile(values).then(res => {
           if (res === 200) {
-            this.form.resetFields();
             message.success("Profile is saved!");
           } else {
             message.error("Failed to save profile!");

@@ -75,7 +75,8 @@ class ProfileSearch extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedRows: []
+      selectedRows: [],
+      displaySearchForm: false
     };
   }
   componentDidMount() {
@@ -83,9 +84,9 @@ class ProfileSearch extends React.Component {
     this.props.requestSearchForm();
   }
 
-  // onChange(pagination, filters, sorter) {
-  //   console.log("params", pagination, filters, sorter);
-  // }
+  onChange(pagination, filters, sorter) {
+    // console.log("params", pagination, filters, sorter);
+  }
 
   handleSearch = () => {
     this.props.form.validateFields((err, values) => {
@@ -117,6 +118,7 @@ class ProfileSearch extends React.Component {
 
   render() {
     const { guestProfiles, searchGPForm, isLoading } = this.props;
+    const { displaySearchForm } = this.state;
     const rowSelection = {
       onChange: (selectedRowKeys, selectedRows) => {
         this.setState({
@@ -142,7 +144,24 @@ class ProfileSearch extends React.Component {
           selectedKeys={[0]}
           mode="horizontal"
         >
-          <Menu.Item key="sync">
+          <Menu.Item
+            key="search"
+            onClick={() => {
+              const reverse = !displaySearchForm;
+              this.setState({
+                displaySearchForm: reverse
+              });
+            }}
+          >
+            <Icon type="search" />
+            Search
+          </Menu.Item>
+          <Menu.Item
+            key="sync"
+            onClick={() => {
+              this.props.requestGuestProfiles();
+            }}
+          >
             <Icon type="sync" />
             Refresh
           </Menu.Item>
@@ -176,69 +195,77 @@ class ProfileSearch extends React.Component {
             guestProfiles &&
             searchGPForm && (
               <Row gutter={16}>
-                {/* <Col lg={8} xl={6} className="custom-form">
-            <div className="title">
-              <Icon type="filter" />
-              Filter Information
-            </div>
-            <div className="form">
-              <Form onSubmit={this.handleSubmit} className="no-valid-form">
-                <Form.Item {...formItemLayout} label="Guest Information">
-                  {getFieldDecorator("GuestInformation")(<Input />)}
-                </Form.Item>
-                <Form.Item {...formItemLayout} label="Passport No">
-                  {getFieldDecorator("PassportNo")(<Input />)}
-                </Form.Item>
-                <Form.Item {...formItemLayout} label="Visa No">
-                  {getFieldDecorator("VisaNo")(<Input />)}
-                </Form.Item>
-                <Form.Item {...formItemLayout} label="Email">
-                  {getFieldDecorator("Email")(<Input />)}
-                </Form.Item>
-                <Form.Item {...formItemLayout} label="Country">
-                  {getFieldDecorator("Country")(
-                    <Select>
-                      {searchGPForm.countryList.map(item => (
-                        <Option value={item.countryCode}>
-                          {item.description}
-                        </Option>
-                      ))}
-                    </Select>
-                  )}
-                </Form.Item>
-                <Form.Item {...formItemLayout} label="VIP">
-                  {getFieldDecorator("VIP")(
-                    <Select>
-                      {searchGPForm.vipList.map(item => (
-                        <Option value={item.vipcode}>
-                          {item.description}
-                        </Option>
-                      ))}
-                    </Select>
-                  )}
-                </Form.Item>
-                <div className="actions1" style={{ marginTop: 20 }}>
-                  <div className="btns">
-                    <Button
-                      icon="delete"
-                      type="primary"
-                      onClick={() => this.handleReset()}
-                    >
-                      Clear
-                    </Button>
-                    <Button
-                      icon="search"
-                      type="primary"
-                      onClick={() => this.handleSearch()}
-                    >
-                      Browse
-                    </Button>
+                <Col
+                  lg={8}
+                  xl={6}
+                  className="custom-form"
+                  style={{ display: displaySearchForm ? "" : "none" }}
+                >
+                  <div className="title">
+                    <Icon type="filter" />
+                    Filter Information
                   </div>
-                </div>
-              </Form>
-            </div>
-          </Col> */}
-                <Col lg={24} xl={24}>
+                  <div className="form">
+                    <Form
+                      onSubmit={this.handleSubmit}
+                      className="no-valid-form"
+                    >
+                      <Form.Item {...formItemLayout} label="Guest Information">
+                        {getFieldDecorator("GuestInformation")(<Input />)}
+                      </Form.Item>
+                      <Form.Item {...formItemLayout} label="Passport No">
+                        {getFieldDecorator("PassportNo")(<Input />)}
+                      </Form.Item>
+                      <Form.Item {...formItemLayout} label="Visa No">
+                        {getFieldDecorator("VisaNo")(<Input />)}
+                      </Form.Item>
+                      <Form.Item {...formItemLayout} label="Email">
+                        {getFieldDecorator("Email")(<Input />)}
+                      </Form.Item>
+                      <Form.Item {...formItemLayout} label="Country">
+                        {getFieldDecorator("Country")(
+                          <Select>
+                            {searchGPForm.countryList.map(item => (
+                              <Option value={item.countryCode}>
+                                {item.description}
+                              </Option>
+                            ))}
+                          </Select>
+                        )}
+                      </Form.Item>
+                      <Form.Item {...formItemLayout} label="VIP">
+                        {getFieldDecorator("VIP")(
+                          <Select>
+                            {searchGPForm.vipList.map(item => (
+                              <Option value={item.vipcode}>
+                                {item.description}
+                              </Option>
+                            ))}
+                          </Select>
+                        )}
+                      </Form.Item>
+                      <div className="actions1" style={{ marginTop: 20 }}>
+                        <div className="btns">
+                          <Button
+                            icon="delete"
+                            type="primary"
+                            onClick={() => this.handleReset()}
+                          >
+                            Clear
+                          </Button>
+                          <Button
+                            icon="search"
+                            type="primary"
+                            onClick={() => this.handleSearch()}
+                          >
+                            Browse
+                          </Button>
+                        </div>
+                      </div>
+                    </Form>
+                  </div>
+                </Col>
+                <Col lg={24} xl={displaySearchForm ? 18 : 24}>
                   <Table
                     rowSelection={rowSelection}
                     scroll={{ x: 1300 }}

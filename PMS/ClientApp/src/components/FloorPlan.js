@@ -84,7 +84,8 @@ class RoomPlan extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentTab: "All"
+      currentTab: "All",
+      displaySearchForm: false
     };
   }
 
@@ -127,6 +128,7 @@ class RoomPlan extends React.Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
+    const { displaySearchForm } = this.state;
     // console.log(this.props);
     const formItemLayout = {
       labelCol: {
@@ -144,9 +146,50 @@ class RoomPlan extends React.Component {
     // console.log(floorPlans);
     return (
       <div className="content">
+        <Menu
+          // onClick={this.handleClick}
+          selectedKeys={[0]}
+          mode="horizontal"
+        >
+          <Menu.Item
+            key="search"
+            onClick={() => {
+              const reverse = !displaySearchForm;
+              this.setState({
+                displaySearchForm: reverse
+              });
+            }}
+          >
+            <Icon type="search" />
+            Search
+          </Menu.Item>
+          <Menu.Item
+            key="sync"
+            onClick={() => {
+              this.props.requestFloorPlans();
+            }}
+          >
+            <Icon type="sync" />
+            Refresh
+          </Menu.Item>
+          <Menu.Item key="book">
+            <Icon type="book" />
+            Reservation
+          </Menu.Item>
+          <Menu.Item key="team">
+            <Icon type="team" />
+            Group
+          </Menu.Item>
+        </Menu>
+
         {floorPlans && searchForm ? (
           <Row gutter={16}>
-            <Col lg={6} xl={5} className="custom-form">
+            <Col
+              lg={6}
+              xl={5}
+              className="custom-form"
+              style={{ display: displaySearchForm ? "" : "none" }}
+            >
               <div className="title">
                 <Icon type="filter" />
                 Filter Information
@@ -234,7 +277,7 @@ class RoomPlan extends React.Component {
                 </Form>
               </div>
             </Col>
-            <Col lg={18} xl={19}>
+            <Col lg={18} xl={displaySearchForm ? 19 : 24}>
               <Menu
                 onClick={this.handleChangeTab}
                 selectedKeys={[currentTab]}
