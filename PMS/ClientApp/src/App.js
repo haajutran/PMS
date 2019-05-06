@@ -4,6 +4,7 @@ import Layout from "./components/Layout";
 import Home from "./components/Home";
 import Reservation from "./components/Reservation";
 import GuestSearch from "./components/GuestSearch";
+import RoomAvailability from "./components/RoomAvailability";
 
 import GuestProfile from "./components/GuestProfile/GuestProfile";
 import ProfileSearch from "./components/ProfileSearch";
@@ -19,6 +20,7 @@ export default () => (
     <Route exact path="/" component={Home} />
     <Route path="/counter" component={Counter} />
 
+    <Route path="/roomavailability" component={RoomAvailability} />
     <Route path="/reservation" component={Reservation} />
     <Route path="/guestsearch" component={GuestSearch} />
     <Route path="/guestprofile" component={GuestProfile} />
