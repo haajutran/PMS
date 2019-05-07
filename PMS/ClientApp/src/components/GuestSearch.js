@@ -1,18 +1,142 @@
 import React from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { actionCreators } from "../store/GuestSearch";
+import { actionCreators } from "../store/ProfileSearch";
 import TopMenu from "./GuestSearch/TopMenu";
-import { Form, Menu, Icon } from "antd";
+import {
+  Menu,
+  Icon,
+  Spin,
+  Form,
+  Row,
+  Col,
+  Select,
+  Button,
+  Input,
+  message,
+  Table
+} from "antd";
+
+const Option = Select.Option;
+const antIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
+const columns = [
+  {
+    title: "Profile Num",
+    dataIndex: "iDcard"
+  },
+  {
+    title: "Name",
+    render: (text, record) => (
+      <span>
+        {record.lastName} {record.firstName}
+      </span>
+    )
+  },
+  {
+    title: "Gender",
+    dataIndex: "sex",
+    render: (text, record) => <span>{text === true ? "Male" : "Female"}</span>
+  },
+  {
+    title: "Title",
+    dataIndex: "gTitleCode"
+  },
+  {
+    title: "VIP",
+    dataIndex: "viPcode"
+  },
+  {
+    title: "Country",
+    dataIndex: "gCountryCode"
+  },
+  {
+    title: "Nationality",
+    dataIndex: "nationalCode"
+  },
+  {
+    title: "Visa No",
+    dataIndex: "visaNo"
+  },
+  {
+    title: "Passport No",
+    dataIndex: "idPassportNo"
+  },
+  {
+    title: "Email",
+    dataIndex: "email"
+  },
+  {
+    title: "Mobile",
+    dataIndex: "mobi"
+  }
+];
 
 class GuestSearch extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      selectedRows: [],
+      displaySearchForm: false
+    };
   }
-  componentDidMount() {}
+  componentDidMount() {
+    this.props.requestGuestProfiles();
+    this.props.requestSearchForm();
+  }
+
+  onChange(pagination, filters, sorter) {
+    // console.log("params", pagination, filters, sorter);
+  }
+
+  handleSearch = () => {
+    this.props.form.validateFields((err, values) => {
+      if (!err) {
+        console.log("Received values of form: ", values);
+        this.props.search(values);
+      }
+    });
+  };
+
+  handleReset = () => {
+    this.props.form.resetFields();
+  };
+
+  hendleEdit = () => {
+    const { selectedRows } = this.state;
+
+    if (selectedRows.length === 0 || selectedRows.length > 1) {
+      message.warning("Select one profile to edit, please!");
+    } else {
+      const idg = selectedRows[0].idG;
+      this.props.history.push(`/guestProfile/${idg}`);
+    }
+  };
+
+  onSelectChange = selectedRowKeys => {
+    this.setState({ selectedRowKeys });
+  };
 
   render() {
+    const { guestProfiles, searchGPForm, isLoading } = this.props;
+    const { displaySearchForm } = this.state;
+    const rowSelection = {
+      onChange: (selectedRowKeys, selectedRows) => {
+        this.setState({
+          selectedRows
+        });
+      }
+    };
+    const { getFieldDecorator } = this.props.form;
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 14 }
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 10 }
+      }
+    };
     return (
       <div>
         <Menu
@@ -20,7 +144,15 @@ class GuestSearch extends React.Component {
           selectedKeys={[0]}
           mode="horizontal"
         >
-          <Menu.Item key="search">
+          <Menu.Item
+            key="search"
+            onClick={() => {
+              const reverse = !displaySearchForm;
+              this.setState({
+                displaySearchForm: reverse
+              });
+            }}
+          >
             <Icon type="search" />
             Search
           </Menu.Item>
@@ -93,11 +225,132 @@ class GuestSearch extends React.Component {
             Assign Room
           </Menu.Item>
         </Menu>
+
+        <div className="content">
+          {isLoading ? (
+            <Spin className="loading-area" indicator={antIcon} />
+          ) : (
+            guestProfiles &&
+            searchGPForm && (
+              <Row gutter={16}>
+                <Col
+                  lg={8}
+                  xl={6}
+                  className="custom-form"
+                  style={{ display: displaySearchForm ? "" : "none" }}
+                >
+                  <div className="title">
+                    <Icon type="filter" />
+                    Filter Information
+                  </div>
+                  <div className="form">
+                    <Form
+                      onSubmit={this.handleSubmit}
+                      className="no-valid-form"
+                    >
+                      <Form.Item {...formItemLayout} label="Maximum Record">
+                        {getFieldDecorator("MaximumRecord")(<Input />)}
+                      </Form.Item>
+                      <Form.Item {...formItemLayout} label="Guest Information">
+                        {getFieldDecorator("GuestInformation")(<Input />)}
+                      </Form.Item>
+                      <Form.Item {...formItemLayout} label="#Room">
+                        {getFieldDecorator("Room")(<Input />)}
+                      </Form.Item>
+                      <Form.Item {...formItemLayout} label="Room Type">
+                        {getFieldDecorator("RoomType")(<Input />)}
+                      </Form.Item>
+                      <Form.Item {...formItemLayout} label="Rate Code">
+                        {getFieldDecorator("RateCode")(<Input />)}
+                      </Form.Item>
+
+                      <Form.Item {...formItemLayout} label="Market Segment">
+                        {getFieldDecorator("MarketSegment")(<Input />)}
+                      </Form.Item>
+                      <Form.Item {...formItemLayout} label="Organization">
+                        {getFieldDecorator("Organization")(<Input />)}
+                      </Form.Item>
+                      <Form.Item {...formItemLayout} label="Group Code">
+                        {getFieldDecorator("GroupCode")(<Input />)}
+                      </Form.Item>
+                    </Form>
+                    <div className="title">
+                      <Icon type="filter" />
+                      Booking Status
+                    </div>
+                    <Form
+                      onSubmit={this.handleSubmit}
+                      className="no-valid-form"
+                    >
+                      <Form.Item {...formItemLayout} label="Maximum Record">
+                        {getFieldDecorator("MaximumRecord")(<Input />)}
+                      </Form.Item>
+                      <Form.Item {...formItemLayout} label="Guest Information">
+                        {getFieldDecorator("GuestInformation")(<Input />)}
+                      </Form.Item>
+                      <Form.Item {...formItemLayout} label="#Room">
+                        {getFieldDecorator("Room")(<Input />)}
+                      </Form.Item>
+                      <Form.Item {...formItemLayout} label="Room Type">
+                        {getFieldDecorator("RoomType")(<Input />)}
+                      </Form.Item>
+                      <Form.Item {...formItemLayout} label="Rate Code">
+                        {getFieldDecorator("RateCode")(<Input />)}
+                      </Form.Item>
+
+                      <Form.Item {...formItemLayout} label="Market Segment">
+                        {getFieldDecorator("MarketSegment")(<Input />)}
+                      </Form.Item>
+                      <Form.Item {...formItemLayout} label="Organization">
+                        {getFieldDecorator("Organization")(<Input />)}
+                      </Form.Item>
+                      <Form.Item {...formItemLayout} label="Group Code">
+                        {getFieldDecorator("GroupCode")(<Input />)}
+                      </Form.Item>
+                    </Form>
+                    <div className="actions1" style={{ marginTop: 20 }}>
+                      <div className="btns">
+                        <Button
+                          icon="delete"
+                          type="primary"
+                          onClick={() => this.handleReset()}
+                        >
+                          Clear
+                        </Button>
+                        <Button
+                          icon="search"
+                          type="primary"
+                          onClick={() => this.handleSearch()}
+                        >
+                          Browse
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </Col>
+                <Col lg={24} xl={displaySearchForm ? 18 : 24}>
+                  <Table
+                    rowSelection={rowSelection}
+                    scroll={{ x: 1300 }}
+                    columns={columns}
+                    dataSource={guestProfiles}
+                    onChange={() => this.onChange()}
+                    className="custom-table"
+                    pagination={{ defaultPageSize: 50 }}
+                  />
+                </Col>
+              </Row>
+            )
+          )}
+        </div>
       </div>
     );
   }
 }
 
-const MainForm = Form.create({ name: "normal_login" })(GuestSearch);
+const MainForm = Form.create({ name: "" })(GuestSearch);
 
-export default connect()(MainForm);
+export default connect(
+  state => state.profileSearch,
+  dispatch => bindActionCreators(actionCreators, dispatch)
+)(MainForm);

@@ -285,7 +285,7 @@ class ProfileSearch extends React.Component {
   }
 }
 
-const MainForm = Form.create({ name: "normal_login" })(ProfileSearch);
+const MainForm = Form.create({ name: "" })(ProfileSearch);
 
 export default connect(
   state => state.profileSearch,
