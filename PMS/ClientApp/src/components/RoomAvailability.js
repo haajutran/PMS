@@ -203,7 +203,12 @@ class Content extends React.Component {
           </Menu.Item>
         </Menu>
         <div className="content">
-          <Table columns={columns} dataSource={data} scroll={{ x: 1300 }} />
+          <Table
+            bordered
+            columns={columns}
+            dataSource={data}
+            scroll={{ x: 1300 }}
+          />
         </div>
       </div>
     );
