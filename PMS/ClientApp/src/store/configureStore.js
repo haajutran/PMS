@@ -2,6 +2,7 @@ import { applyMiddleware, combineReducers, compose, createStore } from "redux";
 import thunk from "redux-thunk";
 import { routerReducer, routerMiddleware } from "react-router-redux";
 
+import * as RoomAvailability from "./RoomAvailability";
 import * as Reservation from "./Reservation";
 import * as GuestSearch from "./GuestSearch";
 import * as GuestProfile from "./GuestProfile";
@@ -14,6 +15,7 @@ import * as WeatherForecasts from "./WeatherForecasts";
 
 export default function configureStore(history, initialState) {
   const reducers = {
+    roomAvailability: RoomAvailability.reducer,
     reservation: Reservation.reducer,
     guestSearch: GuestSearch.reducer,
     guestProfile: GuestProfile.reducer,

@@ -14,8 +14,12 @@ import {
   Button,
   Input,
   message,
-  Table
+  Checkbox,
+  Table,
+  DatePicker
 } from "antd";
+
+const { RangePicker } = DatePicker;
 
 const Option = Select.Option;
 const antIcon = <Icon type="loading" style={{ fontSize: 24 }} spin />;
@@ -76,7 +80,8 @@ class GuestSearch extends React.Component {
     super(props);
     this.state = {
       selectedRows: [],
-      displaySearchForm: false
+      displaySearchForm: false,
+      reserved: false
     };
   }
   componentDidMount() {
@@ -87,6 +92,12 @@ class GuestSearch extends React.Component {
   onChange(pagination, filters, sorter) {
     // console.log("params", pagination, filters, sorter);
   }
+
+  handleChange = e => {
+    this.setState({
+      reserved: e.target.checked
+    });
+  };
 
   handleSearch = () => {
     this.props.form.validateFields((err, values) => {
@@ -117,6 +128,7 @@ class GuestSearch extends React.Component {
   };
 
   render() {
+    const { Reserved } = this.state;
     const { guestProfiles, searchGPForm, isLoading } = this.props;
     const { displaySearchForm } = this.state;
     const rowSelection = {
@@ -234,8 +246,9 @@ class GuestSearch extends React.Component {
             searchGPForm && (
               <Row gutter={16}>
                 <Col
-                  lg={8}
-                  xl={6}
+                  sm={24}
+                  md={12}
+                  xl={10}
                   className="custom-form"
                   style={{ display: displaySearchForm ? "" : "none" }}
                 >
@@ -282,31 +295,222 @@ class GuestSearch extends React.Component {
                       onSubmit={this.handleSubmit}
                       className="no-valid-form"
                     >
-                      <Form.Item {...formItemLayout} label="Maximum Record">
-                        {getFieldDecorator("MaximumRecord")(<Input />)}
-                      </Form.Item>
-                      <Form.Item {...formItemLayout} label="Guest Information">
-                        {getFieldDecorator("GuestInformation")(<Input />)}
-                      </Form.Item>
-                      <Form.Item {...formItemLayout} label="#Room">
-                        {getFieldDecorator("Room")(<Input />)}
-                      </Form.Item>
-                      <Form.Item {...formItemLayout} label="Room Type">
-                        {getFieldDecorator("RoomType")(<Input />)}
-                      </Form.Item>
-                      <Form.Item {...formItemLayout} label="Rate Code">
-                        {getFieldDecorator("RateCode")(<Input />)}
-                      </Form.Item>
+                      <Row>
+                        <Col md={24} xl={12}>
+                          <Form.Item>
+                            {getFieldDecorator("Reserved")(
+                              <Checkbox
+                                value={this.state.reserved}
+                                onChange={this.handleChange}
+                              >
+                                Reserved
+                              </Checkbox>
+                            )}
+                          </Form.Item>
+                        </Col>
+                        <Col md={24} xl={12}>
+                          <Form.Item>
+                            {getFieldDecorator("InHouse")(
+                              <Checkbox
+                                value={this.state.reserved}
+                                onChange={this.handleChange}
+                              >
+                                In House
+                              </Checkbox>
+                            )}
+                          </Form.Item>
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col md={24} xl={12}>
+                          <Form.Item>
+                            {getFieldDecorator("Reserved")(
+                              <Checkbox
+                                value={this.state.reserved}
+                                onChange={this.handleChange}
+                              >
+                                Expected Arrival
+                              </Checkbox>
+                            )}
+                          </Form.Item>
+                        </Col>
+                        <Col md={24} xl={12}>
+                          <Form.Item>
+                            {getFieldDecorator("Reserved")(
+                              <Checkbox
+                                value={this.state.reserved}
+                                onChange={this.handleChange}
+                              >
+                                Expected Departure
+                              </Checkbox>
+                            )}
+                          </Form.Item>
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col md={24} xl={12}>
+                          <Form.Item>
+                            {getFieldDecorator("Reserved")(
+                              <Checkbox
+                                value={this.state.reserved}
+                                onChange={this.handleChange}
+                              >
+                                Check-In Today
+                              </Checkbox>
+                            )}
+                          </Form.Item>
+                        </Col>
+                        <Col md={24} xl={12}>
+                          <Form.Item>
+                            {getFieldDecorator("Reserved")(
+                              <Checkbox
+                                value={this.state.reserved}
+                                onChange={this.handleChange}
+                              >
+                                Check-Out Today
+                              </Checkbox>
+                            )}
+                          </Form.Item>
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col md={24} xl={12}>
+                          <Form.Item>
+                            {getFieldDecorator("Reserved")(
+                              <Checkbox
+                                value={this.state.reserved}
+                                onChange={this.handleChange}
+                              >
+                                Cancel
+                              </Checkbox>
+                            )}
+                          </Form.Item>
+                        </Col>
+                        <Col md={24} xl={12}>
+                          <Form.Item>
+                            {getFieldDecorator("Reserved")(
+                              <Checkbox
+                                value={this.state.reserved}
+                                onChange={this.handleChange}
+                              >
+                                No Show
+                              </Checkbox>
+                            )}
+                          </Form.Item>
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col md={24} xl={12}>
+                          <Form.Item>
+                            {getFieldDecorator("Reserved")(
+                              <Checkbox
+                                value={this.state.reserved}
+                                onChange={this.handleChange}
+                              >
+                                Reservation On Date
+                              </Checkbox>
+                            )}
+                          </Form.Item>
+                        </Col>
+                        <Col md={24} xl={12}>
+                          <Form.Item>
+                            {getFieldDecorator("Reserved")(
+                              <Checkbox
+                                value={this.state.reserved}
+                                onChange={this.handleChange}
+                              >
+                                All Check Out
+                              </Checkbox>
+                            )}
+                          </Form.Item>
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col md={24} xl={10}>
+                          <Form.Item>
+                            {getFieldDecorator("Reserved")(
+                              <Checkbox
+                                value={this.state.reserved}
+                                onChange={this.handleChange}
+                              >
+                                Arrival Date
+                              </Checkbox>
+                            )}
+                          </Form.Item>
+                        </Col>
+                        <Col md={24} xl={14}>
+                          <RangePicker onChange={() => this.onChange()} />
+                        </Col>
+                      </Row>
 
-                      <Form.Item {...formItemLayout} label="Market Segment">
-                        {getFieldDecorator("MarketSegment")(<Input />)}
-                      </Form.Item>
-                      <Form.Item {...formItemLayout} label="Organization">
-                        {getFieldDecorator("Organization")(<Input />)}
-                      </Form.Item>
-                      <Form.Item {...formItemLayout} label="Group Code">
-                        {getFieldDecorator("GroupCode")(<Input />)}
-                      </Form.Item>
+                      <Row>
+                        <Col md={24} xl={10}>
+                          <Form.Item>
+                            {getFieldDecorator("Reserved")(
+                              <Checkbox
+                                value={this.state.reserved}
+                                onChange={this.handleChange}
+                              >
+                                Departure Date
+                              </Checkbox>
+                            )}
+                          </Form.Item>
+                        </Col>
+                        <Col md={24} xl={14}>
+                          <RangePicker onChange={() => this.onChange()} />
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col md={24} xl={10}>
+                          <Form.Item>
+                            {getFieldDecorator("Reserved")(
+                              <Checkbox
+                                value={this.state.reserved}
+                                onChange={this.handleChange}
+                              >
+                                Reservation Date
+                              </Checkbox>
+                            )}
+                          </Form.Item>
+                        </Col>
+                        <Col md={24} xl={14}>
+                          <RangePicker onChange={() => this.onChange()} />
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col md={24} xl={10}>
+                          <Form.Item>
+                            {getFieldDecorator("Reserved")(
+                              <Checkbox
+                                value={this.state.reserved}
+                                onChange={this.handleChange}
+                              >
+                                Cancel/No Show
+                              </Checkbox>
+                            )}
+                          </Form.Item>
+                        </Col>
+                        <Col md={24} xl={14}>
+                          <RangePicker onChange={() => this.onChange()} />
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col md={24} xl={10}>
+                          <Form.Item>
+                            {getFieldDecorator("Reserved")(
+                              <Checkbox
+                                value={this.state.reserved}
+                                onChange={this.handleChange}
+                              >
+                                Trace Date
+                              </Checkbox>
+                            )}
+                          </Form.Item>
+                        </Col>
+                        <Col md={24} xl={14}>
+                          <RangePicker onChange={() => this.onChange()} />
+                        </Col>
+                      </Row>
                     </Form>
                     <div className="actions1" style={{ marginTop: 20 }}>
                       <div className="btns">
@@ -328,7 +532,7 @@ class GuestSearch extends React.Component {
                     </div>
                   </div>
                 </Col>
-                <Col lg={24} xl={displaySearchForm ? 18 : 24}>
+                <Col lg={24} xl={displaySearchForm ? 14 : 24}>
                   <Table
                     rowSelection={rowSelection}
                     scroll={{ x: 1300 }}
