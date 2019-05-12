@@ -5,7 +5,6 @@ import { actionCreators } from "../store/ProfileSearch";
 import {
   Menu,
   Icon,
-  Table,
   Row,
   Col,
   Tag,
@@ -15,7 +14,8 @@ import {
   DatePicker,
   Button
 } from "antd";
-
+import { Header, Table, Rating } from "semantic-ui-react";
+import { element } from "prop-types";
 const temp = [
   [
     "Room type",
@@ -241,8 +241,8 @@ const temp = [
 const columns = [
   {
     title: "Description",
-    dataIndex: "key",
-    key: "key",
+    dataIndex: "0",
+    key: "0",
     render: text => <a href="javascript:;">{text}</a>
   },
   {
@@ -324,7 +324,7 @@ const columns = [
 
 const data = [
   {
-    key: "Superior Double",
+    "0": "Superior Double",
     name: "SUPD",
     age: 22,
     address: 22,
@@ -388,6 +388,16 @@ class RoomAvailability extends React.Component {
   handleChangeValues = () => {
     console.log("sds");
   };
+
+  getColumns() {
+    return Object.keys(temp[0]).map(key => {
+      return {
+        Header: key,
+        accessor: key
+      };
+    });
+  }
+
   render() {
     const {
       fromDate,
@@ -413,6 +423,9 @@ class RoomAvailability extends React.Component {
       }
     };
 
+    const columns2 = this.getColumns();
+    console.log(temp);
+    var weekends = [];
     return (
       <div>
         <Menu
@@ -525,12 +538,47 @@ class RoomAvailability extends React.Component {
         </Form>
 
         <div className="content">
-          <Table
-            bordered
-            columns={columns}
-            dataSource={data}
-            scroll={{ x: 1300 }}
-          />
+          <Table celled padded className="smt-table">
+            <Table.Header fullWidth>
+              <Table.Row>
+                {temp[0].map((element, i) => {
+                  var isWeekend = false;
+                  if (element.includes("|1")) {
+                    weekends.push(i);
+                    element = element.replace("|1", "");
+                    isWeekend = true;
+                  }
+                  return (
+                    <Table.HeaderCell
+                      className={`${isWeekend && "weekend"} ${i === 1 &&
+                        "res"}`}
+                      singleLine
+                    >
+                      {element}
+                    </Table.HeaderCell>
+                  );
+                })}
+              </Table.Row>
+            </Table.Header>
+
+            <Table.Body>
+              {temp.map(
+                (item, i) =>
+                  i > 0 && (
+                    <Table.Row>
+                      {item.map((element, i) => (
+                        <Table.Cell
+                          className={weekends.includes(i) && "weekend"}
+                          style={{ textAlign: `${i >= 2 ? "center" : ""}` }}
+                        >
+                          {element}
+                        </Table.Cell>
+                      ))}
+                    </Table.Row>
+                  )
+              )}
+            </Table.Body>
+          </Table>
         </div>
       </div>
     );
