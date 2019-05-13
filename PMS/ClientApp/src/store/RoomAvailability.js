@@ -6,12 +6,14 @@ const receiveRoomsAvaiType = "RECEIVE_ROOMS_AVAI";
 const initialState = { isLoading: false };
 
 export const actionCreators = {
-  //   requestGuestProfiles: () => async dispatch => {
-  //     dispatch({ type: requestGuestProfilesType });
-  //     const url = "api/api/profileguest/getlistprofile";
-  //     const res = await dataService.get(url);
-  //     dispatch({ type: receiveGuestProfilesType, guestProfiles: res.data });
-  //   },
+  requestRoomAvais: () => async dispatch => {
+    dispatch({ type: requestRoomsAvaiType });
+    const url =
+      "api/api/RoomAvailability/getListRoomAvailability?Date=16/09/2018&Guaranteed=True&NonGuaranteed=True&WaitingList=False&EarlyCI=False&LateCO=False&Allotment=True&DayUse=False&OOO=True&OOI=True&HoldRoom=True";
+    const res = await dataService.get(url);
+    console.log(res);
+    dispatch({ type: receiveRoomsAvaiType, roomAvais: res.data });
+  }
 };
 
 export const reducer = (state, action) => {
@@ -27,7 +29,7 @@ export const reducer = (state, action) => {
   if (action.type === receiveRoomsAvaiType) {
     return {
       ...state,
-      //   guestProfiles: action.guestProfiles,
+      roomAvais: action.roomAvais,
       isLoading: false
     };
   }
